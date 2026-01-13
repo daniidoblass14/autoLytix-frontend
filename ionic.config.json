@@ -1,0 +1,7 @@
+{
+  "name": "AutoLytix",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
