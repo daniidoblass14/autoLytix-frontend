@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar vehículo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" [disabled]="isSaving">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <div class="modal-body">
+    <form [formGroup]="vehicleForm">
+      <div class="form-grid">
+        <!-- Matrícula -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="matriculaControl?.invalid && matriculaControl?.touched">
+            <ion-label position="stacked">Matrícula <span class="required">*</span></ion-label>
+            <ion-input
+              type="text"
+              placeholder="Ej: 1234-ABC"
+              formControlName="matricula"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="matriculaControl?.invalid && matriculaControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>La matrícula es obligatoria</span>
+          </div>
+        </div>
+
+        <!-- Marca -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="marcaControl?.invalid && marcaControl?.touched">
+            <ion-label position="stacked">Marca <span class="required">*</span></ion-label>
+            <ion-input
+              type="text"
+              placeholder="Ej: Seat"
+              formControlName="marca"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="marcaControl?.invalid && marcaControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>La marca es obligatoria</span>
+          </div>
+        </div>
+
+        <!-- Modelo -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="modeloControl?.invalid && modeloControl?.touched">
+            <ion-label position="stacked">Modelo <span class="required">*</span></ion-label>
+            <ion-input
+              type="text"
+              placeholder="Ej: Ibiza 1.9 TDI"
+              formControlName="modelo"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="modeloControl?.invalid && modeloControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El modelo es obligatorio</span>
+          </div>
+        </div>
+
+        <!-- Año -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="anioControl?.invalid && anioControl?.touched">
+            <ion-label position="stacked">Año <span class="required">*</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej: 2006"
+              formControlName="anio"
+              min="1900"
+              max="2100"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="anioControl?.invalid && anioControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El año es obligatorio (1900-2100)</span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="save()" class="save-button" [disabled]="vehicleForm.invalid || isSaving">
+        <ion-spinner *ngIf="isSaving" name="crescent" class="spinner"></ion-spinner>
+        <span *ngIf="!isSaving">Guardar cambios</span>
+        <span *ngIf="isSaving">Guardando...</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

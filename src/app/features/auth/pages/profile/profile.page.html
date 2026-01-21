@@ -1,0 +1,439 @@
+<app-header></app-header>
+
+<ion-content [fullscreen]="true" class="profile-content">
+  <!-- MODO MÓVIL -->
+  <div class="content-wrapper mobile-wrapper">
+    <div class="page-header">
+      <h1 class="page-title">Mi Perfil</h1>
+      <p class="page-subtitle">Gestiona tu información personal</p>
+    </div>
+
+    <!-- Card Cabecera Perfil -->
+    <div class="profile-header-card">
+      <div class="avatar-container">
+        <div class="profile-avatar">
+          <span class="avatar-initial">{{ getInitials() }}</span>
+        </div>
+      </div>
+      <h2 class="profile-name">{{ getFullName() }}</h2>
+      <p class="profile-email">{{ currentUser?.email }}</p>
+      <ion-button 
+        fill="outline" 
+        class="edit-profile-button"
+        (click)="toggleEdit()"
+        [disabled]="isSaving">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        {{ isEditing ? 'Cancelar' : 'Editar perfil' }}
+      </ion-button>
+    </div>
+
+    <!-- Card Información Personal -->
+    <div class="info-card">
+      <div class="card-header">
+        <ion-icon name="person-outline" class="card-icon"></ion-icon>
+        <h3 class="card-title">Información personal</h3>
+      </div>
+      <form [formGroup]="profileForm" class="profile-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre *</label>
+            <ion-input
+              formControlName="nombre"
+              type="text"
+              placeholder="Ej: Juan"
+              [disabled]="!isEditing">
+            </ion-input>
+            <div class="error-message" *ngIf="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+              El nombre es requerido (mínimo 2 caracteres)
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Apellido *</label>
+            <ion-input
+              formControlName="apellido"
+              type="text"
+              placeholder="Ej: García"
+              [disabled]="!isEditing">
+            </ion-input>
+            <div class="error-message" *ngIf="profileForm.get('apellido')?.invalid && profileForm.get('apellido')?.touched">
+              El apellido es requerido (mínimo 2 caracteres)
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email *</label>
+            <ion-input
+              formControlName="email"
+              type="email"
+              placeholder="Ej: juan@example.com"
+              [disabled]="!isEditing">
+            </ion-input>
+            <div class="error-message" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+              Email inválido
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono</label>
+            <ion-input
+              formControlName="telefono"
+              type="tel"
+              placeholder="Ej: 612345678"
+              [disabled]="!isEditing">
+            </ion-input>
+            <div class="error-message" *ngIf="profileForm.get('telefono')?.invalid && profileForm.get('telefono')?.touched">
+              Teléfono inválido (9-15 dígitos)
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions" *ngIf="isEditing">
+          <ion-button
+            expand="block"
+            class="save-button"
+            (click)="onSaveProfile()"
+            [disabled]="!isFormDirty || isSaving">
+            <ion-icon name="checkmark-outline" slot="start" *ngIf="!isSaving"></ion-icon>
+            <ion-spinner name="crescent" *ngIf="isSaving"></ion-spinner>
+            {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
+          </ion-button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Card Seguridad -->
+    <div class="info-card">
+      <div class="card-header">
+        <ion-icon name="lock-closed-outline" class="card-icon"></ion-icon>
+        <h3 class="card-title">Seguridad</h3>
+      </div>
+      <form [formGroup]="passwordForm" class="profile-form">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Contraseña actual *</label>
+            <ion-input
+              formControlName="currentPassword"
+              type="password"
+              placeholder="Introduce tu contraseña actual">
+            </ion-input>
+            <div class="error-message" *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+              La contraseña actual es requerida
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Nueva contraseña *</label>
+            <ion-input
+              formControlName="newPassword"
+              type="password"
+              placeholder="Mínimo 6 caracteres">
+            </ion-input>
+            <div class="error-message" *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+              La nueva contraseña es requerida (mínimo 6 caracteres)
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Repetir nueva contraseña *</label>
+            <ion-input
+              formControlName="confirmPassword"
+              type="password"
+              placeholder="Repite la nueva contraseña">
+            </ion-input>
+            <div class="error-message" *ngIf="passwordMismatch">
+              Las contraseñas no coinciden
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <ion-button
+            expand="block"
+            class="update-password-button"
+            (click)="onUpdatePassword()"
+            [disabled]="passwordForm.invalid || isUpdatingPassword">
+            <ion-icon name="lock-closed-outline" slot="start" *ngIf="!isUpdatingPassword"></ion-icon>
+            <ion-spinner name="crescent" *ngIf="isUpdatingPassword"></ion-spinner>
+            {{ isUpdatingPassword ? 'Actualizando...' : 'Actualizar contraseña' }}
+          </ion-button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Card Preferencias -->
+    <div class="info-card">
+      <div class="card-header">
+        <ion-icon name="settings-outline" class="card-icon"></ion-icon>
+        <h3 class="card-title">Preferencias</h3>
+      </div>
+      <form [formGroup]="preferencesForm" class="preferences-form">
+        <div class="preference-item">
+          <div class="preference-info">
+            <label class="preference-label">Notificaciones por email</label>
+            <p class="preference-description">Recibe notificaciones importantes por correo electrónico</p>
+          </div>
+          <ion-toggle
+            formControlName="emailNotifications"
+            (ionChange)="onPreferenceChange('emailNotifications', $event.detail.checked)">
+          </ion-toggle>
+        </div>
+
+        <div class="preference-item">
+          <div class="preference-info">
+            <label class="preference-label">Avisos de mantenimiento</label>
+            <p class="preference-description">Te avisaremos cuando tu vehículo necesite mantenimiento</p>
+          </div>
+          <ion-toggle
+            formControlName="maintenanceAlerts"
+            (ionChange)="onPreferenceChange('maintenanceAlerts', $event.detail.checked)">
+          </ion-toggle>
+        </div>
+
+        <div class="preference-item">
+          <div class="preference-info">
+            <label class="preference-label">Recordatorios de ITV / revisiones</label>
+            <p class="preference-description">Recibe recordatorios antes de que caduquen tus revisiones</p>
+          </div>
+          <ion-toggle
+            formControlName="itvReminders"
+            (ionChange)="onPreferenceChange('itvReminders', $event.detail.checked)">
+          </ion-toggle>
+        </div>
+      </form>
+    </div>
+
+    <!-- Botón Cerrar Sesión -->
+    <div class="logout-section">
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="danger"
+        class="logout-button"
+        (click)="onLogout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Cerrar sesión
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- MODO DESKTOP -->
+  <div class="desktop-wrapper">
+    <div class="desktop-container">
+      <div class="page-header desktop-header">
+        <h1 class="page-title">Mi Perfil</h1>
+        <p class="page-subtitle">Gestiona tu información personal</p>
+      </div>
+
+      <div class="desktop-content">
+        <!-- Card Cabecera Perfil -->
+        <div class="profile-header-card desktop-profile-header">
+          <div class="avatar-container">
+            <div class="profile-avatar">
+              <span class="avatar-initial">{{ getInitials() }}</span>
+            </div>
+          </div>
+          <h2 class="profile-name">{{ getFullName() }}</h2>
+          <p class="profile-email">{{ currentUser?.email }}</p>
+          <ion-button 
+            fill="outline" 
+            class="edit-profile-button"
+            (click)="toggleEdit()"
+            [disabled]="isSaving">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            {{ isEditing ? 'Cancelar' : 'Editar perfil' }}
+          </ion-button>
+        </div>
+
+        <!-- Grid de Cards -->
+        <div class="desktop-cards-grid">
+          <!-- Card Información Personal -->
+          <div class="info-card desktop-card">
+            <div class="card-header">
+              <ion-icon name="person-outline" class="card-icon"></ion-icon>
+              <h3 class="card-title">Información personal</h3>
+            </div>
+            <form [formGroup]="profileForm" class="profile-form">
+              <div class="form-grid desktop-form-grid">
+                <div class="form-group">
+                  <label>Nombre *</label>
+                  <ion-input
+                    formControlName="nombre"
+                    type="text"
+                    placeholder="Ej: Juan"
+                    [disabled]="!isEditing">
+                  </ion-input>
+                  <div class="error-message" *ngIf="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+                    El nombre es requerido (mínimo 2 caracteres)
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Apellido *</label>
+                  <ion-input
+                    formControlName="apellido"
+                    type="text"
+                    placeholder="Ej: García"
+                    [disabled]="!isEditing">
+                  </ion-input>
+                  <div class="error-message" *ngIf="profileForm.get('apellido')?.invalid && profileForm.get('apellido')?.touched">
+                    El apellido es requerido (mínimo 2 caracteres)
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Email *</label>
+                  <ion-input
+                    formControlName="email"
+                    type="email"
+                    placeholder="Ej: juan@example.com"
+                    [disabled]="!isEditing">
+                  </ion-input>
+                  <div class="error-message" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+                    Email inválido
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Teléfono</label>
+                  <ion-input
+                    formControlName="telefono"
+                    type="tel"
+                    placeholder="Ej: 612345678"
+                    [disabled]="!isEditing">
+                  </ion-input>
+                  <div class="error-message" *ngIf="profileForm.get('telefono')?.invalid && profileForm.get('telefono')?.touched">
+                    Teléfono inválido (9-15 dígitos)
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions" *ngIf="isEditing">
+                <ion-button
+                  class="save-button"
+                  (click)="onSaveProfile()"
+                  [disabled]="!isFormDirty || isSaving">
+                  <ion-icon name="checkmark-outline" slot="start" *ngIf="!isSaving"></ion-icon>
+                  <ion-spinner name="crescent" *ngIf="isSaving"></ion-spinner>
+                  {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
+                </ion-button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Card Seguridad -->
+          <div class="info-card desktop-card">
+            <div class="card-header">
+              <ion-icon name="lock-closed-outline" class="card-icon"></ion-icon>
+              <h3 class="card-title">Seguridad</h3>
+            </div>
+            <form [formGroup]="passwordForm" class="profile-form">
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label>Contraseña actual *</label>
+                  <ion-input
+                    formControlName="currentPassword"
+                    type="password"
+                    placeholder="Introduce tu contraseña actual">
+                  </ion-input>
+                  <div class="error-message" *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+                    La contraseña actual es requerida
+                  </div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label>Nueva contraseña *</label>
+                  <ion-input
+                    formControlName="newPassword"
+                    type="password"
+                    placeholder="Mínimo 6 caracteres">
+                  </ion-input>
+                  <div class="error-message" *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+                    La nueva contraseña es requerida (mínimo 6 caracteres)
+                  </div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label>Repetir nueva contraseña *</label>
+                  <ion-input
+                    formControlName="confirmPassword"
+                    type="password"
+                    placeholder="Repite la nueva contraseña">
+                  </ion-input>
+                  <div class="error-message" *ngIf="passwordMismatch">
+                    Las contraseñas no coinciden
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <ion-button
+                  class="update-password-button"
+                  (click)="onUpdatePassword()"
+                  [disabled]="passwordForm.invalid || isUpdatingPassword">
+                  <ion-icon name="lock-closed-outline" slot="start" *ngIf="!isUpdatingPassword"></ion-icon>
+                  <ion-spinner name="crescent" *ngIf="isUpdatingPassword"></ion-spinner>
+                  {{ isUpdatingPassword ? 'Actualizando...' : 'Actualizar contraseña' }}
+                </ion-button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Card Preferencias -->
+        <div class="info-card desktop-card">
+          <div class="card-header">
+            <ion-icon name="settings-outline" class="card-icon"></ion-icon>
+            <h3 class="card-title">Preferencias</h3>
+          </div>
+          <form [formGroup]="preferencesForm" class="preferences-form">
+            <div class="preference-item">
+              <div class="preference-info">
+                <label class="preference-label">Notificaciones por email</label>
+                <p class="preference-description">Recibe notificaciones importantes por correo electrónico</p>
+              </div>
+              <ion-toggle
+                formControlName="emailNotifications"
+                (ionChange)="onPreferenceChange('emailNotifications', $event.detail.checked)">
+              </ion-toggle>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <label class="preference-label">Avisos de mantenimiento</label>
+                <p class="preference-description">Te avisaremos cuando tu vehículo necesite mantenimiento</p>
+              </div>
+              <ion-toggle
+                formControlName="maintenanceAlerts"
+                (ionChange)="onPreferenceChange('maintenanceAlerts', $event.detail.checked)">
+              </ion-toggle>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <label class="preference-label">Recordatorios de ITV / revisiones</label>
+                <p class="preference-description">Recibe recordatorios antes de que caduquen tus revisiones</p>
+              </div>
+              <ion-toggle
+                formControlName="itvReminders"
+                (ionChange)="onPreferenceChange('itvReminders', $event.detail.checked)">
+              </ion-toggle>
+            </div>
+          </form>
+        </div>
+
+        <!-- Botón Cerrar Sesión -->
+        <div class="logout-section desktop-logout-section">
+          <ion-button
+            fill="outline"
+            color="danger"
+            class="logout-button"
+            (click)="onLogout()">
+            <ion-icon name="log-out-outline" slot="start"></ion-icon>
+            Cerrar sesión
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

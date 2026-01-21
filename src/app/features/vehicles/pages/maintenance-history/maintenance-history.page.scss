@@ -1,0 +1,435 @@
+// Header styles moved to app-header.component.scss
+
+// ============================================
+// CONTENT BASE
+// ============================================
+.maintenance-history-content {
+  --background: #f7fafc;
+
+  @media (min-width: 1024px) {
+    --background: #f0f4f8;
+  }
+}
+
+// ============================================
+// LOADING & ERROR STATES
+// ============================================
+.loading-container {
+  padding: 20px;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  .error-icon {
+    font-size: 64px;
+    color: #cbd5e0;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 15px;
+    color: #718096;
+    margin: 0 0 28px 0;
+  }
+
+  .retry-button {
+    --background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    --color: white;
+    --border-radius: 10px;
+    font-weight: 600;
+    height: 44px;
+  }
+}
+
+// ============================================
+// MODO MÓVIL (<1024px)
+// ============================================
+.mobile-wrapper {
+  display: block;
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  background: white;
+  min-height: 100%;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.page-header {
+  padding: 20px 20px 16px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .header-title-section {
+    flex: 1;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+  }
+
+  .add-button {
+    --background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    --color: white;
+    --border-radius: 10px;
+    font-weight: 600;
+    margin: 0;
+    align-self: flex-start;
+
+    @media (min-width: 768px) {
+      align-self: center;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  margin: 20px;
+
+  .empty-icon {
+    font-size: 64px;
+    color: #cbd5e0;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 15px;
+    color: #718096;
+    margin: 0 0 24px 0;
+  }
+
+  .empty-add-button {
+    --background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    --color: white;
+    --border-radius: 10px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  &.desktop-empty {
+    margin: 20px 0;
+  }
+}
+
+.maintenances-list {
+  padding: 0 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.maintenance-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .maintenance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+
+    .maintenance-type {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+
+      .type-icon {
+        font-size: 24px;
+        color: #4a90e2;
+      }
+
+      .type-label {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2d3748;
+      }
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .maintenance-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: #48bb78;
+    }
+
+    .action-menu-button {
+      --color: #718096;
+      --padding-start: 8px;
+      --padding-end: 8px;
+      margin: 0;
+      min-width: 40px;
+      height: 40px;
+      transition: opacity 0.2s ease;
+
+      ion-icon {
+        font-size: 20px;
+      }
+
+      &:hover {
+        --color: #4a90e2;
+        opacity: 1;
+      }
+
+      @media (min-width: 768px) {
+        opacity: 0.7;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .maintenance-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+
+      .detail-icon {
+        font-size: 18px;
+        color: #718096;
+        margin-top: 2px;
+        flex-shrink: 0;
+
+        &.next {
+          color: #4a90e2;
+        }
+      }
+
+      .detail-label {
+        color: #718096;
+        font-weight: 500;
+        min-width: 100px;
+      }
+
+      .detail-value {
+        color: #2d3748;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      &.notes {
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid #e2e8f0;
+
+        .notes-content {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          margin-left: 28px;
+
+          .detail-label {
+            font-size: 13px;
+            color: #718096;
+            margin: 0;
+          }
+
+          .notes-text {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.5;
+            margin: 0;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// MODO DESKTOP (>=1024px)
+// ============================================
+.desktop-wrapper {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+  }
+}
+
+.desktop-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 40px;
+}
+
+.desktop-header {
+  padding: 0 0 24px;
+  background: transparent;
+
+  .page-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+    text-align: left;
+  }
+}
+
+.desktop-empty {
+  padding: 100px 20px;
+  background: transparent;
+
+  .empty-icon {
+    font-size: 96px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+}
+
+.desktop-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 0;
+
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.desktop-card {
+  .maintenance-header {
+    .maintenance-type {
+      .type-icon {
+        font-size: 28px;
+      }
+
+      .type-label {
+        font-size: 20px;
+      }
+    }
+
+    .maintenance-price {
+      font-size: 24px;
+    }
+  }
+
+  .maintenance-details {
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .detail-item {
+      font-size: 15px;
+
+      .detail-icon {
+        font-size: 20px;
+      }
+
+      .detail-label {
+        min-width: 120px;
+      }
+
+      &.notes {
+        .notes-content {
+          .notes-text {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -147,3 +147,7 @@ project.xcworkspace/
 # =====================================================
 config.local.json
 capacitor.config.local.ts
+# Accidental local files
+tatus
+# Windows reserved filename created accidentally
+nul

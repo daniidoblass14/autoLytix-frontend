@@ -1,0 +1,100 @@
+<ion-content [fullscreen]="true" class="login-content">
+  <!-- Header con Logo -->
+  <div class="login-header">
+    <div class="logo-container">
+      <ion-icon name="car-sport-outline" class="logo-icon"></ion-icon>
+      <h1 class="logo-text">AutoLytix</h1>
+    </div>
+  </div>
+
+  <!-- Card de Login -->
+  <div class="login-container">
+    <ion-card class="login-card">
+      <ion-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <!-- Título -->
+          <h2 class="login-title">Iniciar Sesión</h2>
+
+          <!-- Input Email -->
+          <div class="input-wrapper" [class.error]="emailControl?.invalid && emailControl?.touched">
+            <ion-icon name="person-outline" class="input-icon"></ion-icon>
+            <ion-input
+              type="email"
+              placeholder="Correo electrónico"
+              formControlName="email"
+              class="custom-input">
+            </ion-input>
+          </div>
+
+          <!-- Input Password -->
+          <div class="input-wrapper" [class.error]="passwordControl?.invalid && passwordControl?.touched">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <ion-input
+              [type]="passwordVisible ? 'text' : 'password'"
+              placeholder="Contraseña"
+              formControlName="password"
+              class="custom-input">
+            </ion-input>
+            <ion-icon
+              [name]="passwordVisible ? 'eye-outline' : 'eye-off-outline'"
+              class="password-toggle-icon"
+              (click)="togglePasswordVisibility()">
+            </ion-icon>
+          </div>
+
+          <!-- Botón Login -->
+          <ion-button
+            expand="block"
+            type="submit"
+            class="login-button"
+            [disabled]="isLoading"
+            (click)="onLogin()">
+            <ion-spinner *ngIf="isLoading" name="crescent" class="spinner-inline"></ion-spinner>
+            <span *ngIf="!isLoading">Iniciar Sesión</span>
+          </ion-button>
+        </form>
+
+        <!-- Olvidaste contraseña -->
+        <div class="forgot-password">
+          <a (click)="onForgotPassword()">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Separador -->
+        <div class="separator">
+          <div class="separator-line"></div>
+          <div class="separator-circle"></div>
+          <div class="separator-line"></div>
+        </div>
+
+        <!-- Botones Sociales -->
+        <!-- Contenedor para el botón oficial de Google -->
+        <div id="googleBtn" class="google-btn-container"></div>
+
+        <!-- Ocultados para beta - próximamente -->
+        <!--
+        <ion-button
+          expand="block"
+          class="social-button facebook-button"
+          (click)="onFacebookLogin()">
+          <ion-icon name="logo-facebook" slot="start"></ion-icon>
+          Facebook
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          class="social-button apple-button"
+          (click)="onAppleLogin()">
+          <ion-icon name="logo-apple" slot="start"></ion-icon>
+          Apple
+        </ion-button>
+        -->
+
+        <!-- Footer -->
+        <div class="register-footer">
+          <span>¿No tienes cuenta? </span>
+          <a routerLink="/register" class="register-link">Regístrate</a>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

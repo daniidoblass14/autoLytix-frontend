@@ -1,0 +1,187 @@
+<app-header 
+  [showBackButton]="true"
+  [showNav]="false"
+  [breadcrumbItems]="getBreadcrumbItems()">
+</app-header>
+
+<ion-content [fullscreen]="true" class="vehicle-detail-content">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-skeleton-text animated style="width: 100%; height: 300px; margin-bottom: 24px; border-radius: 16px;"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 16px;"></ion-skeleton-text>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && error" class="error-container">
+    <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+    <h2>{{ error.includes('No tienes acceso') ? 'Acceso denegado' : error.includes('no encontrado') ? 'Vehículo no encontrado' : 'Error al cargar' }}</h2>
+    <p>{{ error }}</p>
+    <ion-button class="back-error-button" (click)="goToVehiclesList()">
+      <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+      Volver a Mis Vehículos
+    </ion-button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && !error && vehicle" class="detail-wrapper">
+    <!-- Mobile Wrapper -->
+    <div class="mobile-wrapper">
+      <!-- Título y Subtítulo -->
+      <div class="page-header">
+        <h1 class="page-title">Detalles del Vehículo</h1>
+        <p class="page-subtitle">Administra y monitorea tus autos</p>
+      </div>
+
+      <!-- Card Principal -->
+      <div class="main-card mobile-card">
+        <div class="vehicle-image-container mobile-image">
+          <div class="vehicle-image-placeholder">
+            <ion-icon name="car-sport-outline" class="vehicle-placeholder-icon"></ion-icon>
+          </div>
+        </div>
+        <div class="vehicle-info-container mobile-info">
+          <h2 class="vehicle-name">{{ vehicle.marca }} {{ vehicle.modelo }}</h2>
+          <div class="vehicle-details">
+            <div class="detail-row">
+              <span class="detail-label">Año:</span>
+              <span class="detail-value">{{ vehicle.anio }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Matrícula:</span>
+              <span class="detail-value">{{ vehicle.matricula }}</span>
+            </div>
+            <div class="status-row">
+              <ion-icon name="checkmark-circle" class="status-icon"></ion-icon>
+              <span class="status-text">Vehículo en buen estado</span>
+            </div>
+          </div>
+          <ion-button class="edit-button" fill="outline" (click)="onEditVehicle()">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Editar Vehículo
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Cards Inferiores -->
+      <div class="info-cards mobile-cards">
+        <div class="info-card maintenance-card">
+          <h3 class="card-title">
+            <ion-icon name="build-outline" class="card-icon"></ion-icon>
+            Mantenimiento
+          </h3>
+          <p class="card-subtitle">Último servicio</p>
+          <p class="card-value">{{ lastMaintenanceText }}</p>
+          <div class="maintenance-status" [class.ok]="!maintenanceAlert.needsMaintenance" [class.warning]="maintenanceAlert.needsMaintenance">
+            <p class="card-status" *ngIf="!maintenanceAlert.needsMaintenance && hasMaintenances">Todo en orden</p>
+            <div *ngIf="maintenanceAlert.needsMaintenance" class="maintenance-warning">
+              <p class="card-status warning-text">Mantenimiento pendiente</p>
+              <p class="card-warning-detail">Has superado el próximo servicio en {{ formatKilometers(maintenanceAlert.overdueKm || 0) }} km ({{ maintenanceAlert.overdueType }})</p>
+            </div>
+          </div>
+          <ion-button class="card-link" fill="clear" (click)="onViewMaintenanceHistory()">
+            Historial de Servicios
+            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="info-card mileage-card">
+          <h3 class="card-title">
+            <ion-icon name="speedometer-outline" class="card-icon"></ion-icon>
+            Kilometraje
+          </h3>
+          <p class="card-subtitle">Kilometraje actual</p>
+          <p class="card-value">{{ formatKilometers(vehicle.kmActuales) }} km</p>
+          <p class="card-status">{{ getKilometrajeUpdateText() }}</p>
+          <ion-button 
+            class="card-link" 
+            fill="clear" 
+            (click)="onEditKilometraje()">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Actualizar kilometraje
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Wrapper -->
+    <div class="desktop-wrapper">
+      <div class="desktop-container">
+        <!-- Título y Subtítulo -->
+        <div class="page-header desktop-header">
+          <h1 class="page-title">Detalles del Vehículo</h1>
+          <p class="page-subtitle">Administra y monitorea tus autos</p>
+        </div>
+
+        <!-- Card Principal -->
+        <div class="main-card desktop-card">
+          <div class="vehicle-image-container desktop-image">
+            <div class="vehicle-image-placeholder">
+              <ion-icon name="car-sport-outline" class="vehicle-placeholder-icon"></ion-icon>
+            </div>
+          </div>
+          <div class="vehicle-info-container desktop-info">
+            <h2 class="vehicle-name">{{ vehicle.marca }} {{ vehicle.modelo }}</h2>
+            <div class="vehicle-details">
+              <div class="detail-row">
+                <span class="detail-label">Año:</span>
+                <span class="detail-value">{{ vehicle.anio }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Matrícula:</span>
+                <span class="detail-value">{{ vehicle.matricula }}</span>
+              </div>
+              <div class="status-row">
+                <ion-icon name="checkmark-circle" class="status-icon"></ion-icon>
+                <span class="status-text">Vehículo en buen estado</span>
+              </div>
+            </div>
+            <ion-button class="edit-button" fill="outline" (click)="onEditVehicle()">
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Editar Vehículo
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Cards Inferiores -->
+        <div class="info-cards desktop-cards">
+          <div class="info-card maintenance-card">
+            <h3 class="card-title">
+              <ion-icon name="build-outline" class="card-icon"></ion-icon>
+              Mantenimiento
+            </h3>
+                    <p class="card-subtitle">Último servicio</p>
+                    <p class="card-value">{{ lastMaintenanceText }}</p>
+                    <div class="maintenance-status" [class.ok]="!maintenanceAlert.needsMaintenance" [class.warning]="maintenanceAlert.needsMaintenance">
+                      <p class="card-status" *ngIf="!maintenanceAlert.needsMaintenance && hasMaintenances">Todo en orden</p>
+                      <div *ngIf="maintenanceAlert.needsMaintenance" class="maintenance-warning">
+                        <p class="card-status warning-text">Mantenimiento pendiente</p>
+                        <p class="card-warning-detail">Has superado el próximo servicio en {{ formatKilometers(maintenanceAlert.overdueKm || 0) }} km ({{ maintenanceAlert.overdueType }})</p>
+                      </div>
+                    </div>
+            <ion-button class="card-link" fill="clear" (click)="onViewMaintenanceHistory()">
+              Historial de Servicios
+              <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+
+          <div class="info-card mileage-card">
+            <h3 class="card-title">
+              <ion-icon name="speedometer-outline" class="card-icon"></ion-icon>
+              Kilometraje
+            </h3>
+            <p class="card-subtitle">Kilometraje actual</p>
+            <p class="card-value">{{ formatKilometers(vehicle.kmActuales) }} km</p>
+            <p class="card-status">{{ getKilometrajeUpdateText() }}</p>
+            <ion-button 
+              class="card-link" 
+              fill="clear" 
+              (click)="onEditKilometraje()">
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Actualizar kilometraje
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

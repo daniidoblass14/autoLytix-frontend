@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        Actualizar Kilometraje
+      </span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="cancel()" [disabled]="isSaving">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content" [scrollY]="true" [fullscreen]="false">
+  <div class="modal-body">
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando vehículos...</p>
+    </div>
+
+    <form [formGroup]="mileageForm" class="mileage-form" *ngIf="!isLoading">
+      <div class="form-grid">
+        <!-- Seleccionar Vehículo -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none" [class.error]="vehicleControl?.invalid && vehicleControl?.touched">
+            <ion-label position="stacked">Vehículo <span class="required">*</span></ion-label>
+            <ion-select 
+              formControlName="vehiculoId" 
+              placeholder="Selecciona un vehículo"
+              (ionChange)="onVehicleChange()">
+              <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id">
+                {{ getVehicleDisplayName(vehicle) }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error-message" *ngIf="vehicleControl?.invalid && vehicleControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>Debes seleccionar un vehículo</span>
+          </div>
+        </div>
+
+        <!-- Kilometraje Actual -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none" [class.error]="kmActualesControl?.invalid && kmActualesControl?.touched">
+            <ion-label position="stacked">Nuevo Kilometraje <span class="required">*</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej. 250000"
+              formControlName="kmActuales"
+              min="0"
+            ></ion-input>
+          </ion-item>
+          <div class="input-suffix-wrapper">
+            <span class="input-suffix">km</span>
+          </div>
+          <div class="error-message" *ngIf="kmActualesControl?.invalid && kmActualesControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El kilometraje es obligatorio y debe ser mayor o igual a 0</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="info-text">El kilometraje se actualizará para el vehículo seleccionado.</p>
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="modal-footer">
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="save()" class="save-button" [disabled]="mileageForm.invalid || isSaving || isLoading">
+        <ion-spinner *ngIf="isSaving" name="crescent" class="spinner"></ion-spinner>
+        <ion-icon *ngIf="!isSaving" name="checkmark-outline" slot="start"></ion-icon>
+        <span *ngIf="!isSaving">Actualizar</span>
+        <span *ngIf="isSaving">Actualizando...</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

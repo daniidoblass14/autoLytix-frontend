@@ -1,0 +1,64 @@
+<ion-content [fullscreen]="true" class="verify-content">
+  <!-- Header con Logo -->
+  <div class="verify-header">
+    <div class="logo-container">
+      <ion-icon name="car-sport-outline" class="logo-icon"></ion-icon>
+      <h1 class="logo-text">AutoLytix</h1>
+    </div>
+  </div>
+
+  <!-- Card de Verificación -->
+  <div class="verify-container">
+    <ion-card class="verify-card">
+      <ion-card-content>
+        <!-- Estado: Loading -->
+        <div *ngIf="state === 'loading'" class="verify-state">
+          <ion-spinner name="crescent" class="verify-spinner"></ion-spinner>
+          <h2 class="verify-title">Verificando email...</h2>
+          <p class="verify-message">Por favor, espera un momento.</p>
+        </div>
+
+        <!-- Estado: Success -->
+        <div *ngIf="state === 'success'" class="verify-state">
+          <ion-icon name="checkmark-circle" class="success-icon"></ion-icon>
+          <h2 class="verify-title">Email verificado correctamente</h2>
+          <p class="verify-message">Tu cuenta ha sido verificada correctamente. Ya puedes iniciar sesión.</p>
+          <ion-button
+            expand="block"
+            class="verify-button"
+            (click)="goToLogin()">
+            Ir a Iniciar Sesión
+          </ion-button>
+        </div>
+
+        <!-- Estado: Error (400, 500, etc.) -->
+        <div *ngIf="state === 'error'" class="verify-state">
+          <ion-icon name="close-circle" class="error-icon"></ion-icon>
+          <h2 class="verify-title">Error de verificación</h2>
+          <p class="verify-message">{{ errorMessage }}</p>
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="verify-button-secondary"
+            (click)="goToLogin()">
+            Volver a Iniciar Sesión
+          </ion-button>
+        </div>
+
+        <!-- Estado: No Token -->
+        <div *ngIf="state === 'no-token'" class="verify-state">
+          <ion-icon name="close-circle" class="error-icon"></ion-icon>
+          <h2 class="verify-title">Error</h2>
+          <p class="verify-message">{{ errorMessage }}</p>
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="verify-button-secondary"
+            (click)="goToLogin()">
+            Volver a Iniciar Sesión
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

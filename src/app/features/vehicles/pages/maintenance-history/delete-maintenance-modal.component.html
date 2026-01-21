@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar class="modal-header">
+    <ion-title>Eliminar mantenimiento</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="cancel()" class="close-button">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<div class="modal-body">
+  <p class="confirmation-text">¿Seguro que quieres eliminar este mantenimiento?</p>
+</div>
+
+<ion-footer>
+  <ion-toolbar class="modal-footer">
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="confirm()" class="delete-button">
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
+        Eliminar
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

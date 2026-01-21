@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar class="modal-header">
+    <ion-title>
+      <div class="header-content">
+        <div class="header-title-wrapper">
+          <ion-icon name="car-outline" class="header-icon"></ion-icon>
+          <div class="header-text">
+            <h2 class="header-title">Añadir vehículo</h2>
+            <p class="header-subtitle">Añádelo en menos de 1 minuto</p>
+          </div>
+        </div>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="cancel()" class="close-button" [disabled]="isSaving">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content" [scrollY]="true" [fullscreen]="false">
+  <div class="modal-body">
+    <form [formGroup]="vehicleForm" class="vehicle-form">
+      
+      <!-- Sección 1: Datos básicos -->
+      <div class="form-section">
+        <div class="section-header">
+          <ion-icon name="document-text-outline" class="section-icon"></ion-icon>
+          <h3 class="section-title">Datos básicos</h3>
+        </div>
+        
+        <div class="form-grid">
+          <!-- Marca -->
+          <div class="form-group">
+            <ion-item class="form-item" lines="none" [class.error]="marcaControl?.invalid && marcaControl?.touched">
+              <ion-label position="stacked">Marca <span class="required">*</span></ion-label>
+              <ion-input
+                type="text"
+                placeholder="Ej. Seat"
+                formControlName="marca"
+              ></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="marcaControl?.invalid && marcaControl?.touched">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>La marca es obligatoria</span>
+            </div>
+          </div>
+
+          <!-- Modelo -->
+          <div class="form-group">
+            <ion-item class="form-item" lines="none" [class.error]="modeloControl?.invalid && modeloControl?.touched">
+              <ion-label position="stacked">Modelo <span class="required">*</span></ion-label>
+              <ion-input
+                type="text"
+                placeholder="Ej. Ibiza 1.9 TDI"
+                formControlName="modelo"
+              ></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="modeloControl?.invalid && modeloControl?.touched">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>El modelo es obligatorio</span>
+            </div>
+          </div>
+
+          <!-- Año -->
+          <div class="form-group">
+            <ion-item class="form-item" lines="none" [class.error]="anioControl?.invalid && anioControl?.touched">
+              <ion-label position="stacked">Año <span class="required">*</span></ion-label>
+              <ion-select formControlName="anio" placeholder="Selecciona el año">
+                <ion-select-option *ngFor="let year of years" [value]="year">
+                  {{ year }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div class="error-message" *ngIf="anioControl?.invalid && anioControl?.touched">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>El año es obligatorio</span>
+            </div>
+          </div>
+
+          <!-- Matrícula (opcional) -->
+          <div class="form-group">
+            <ion-item class="form-item" lines="none">
+              <ion-label position="stacked">Matrícula <span class="optional">(opcional)</span></ion-label>
+              <ion-input
+                type="text"
+                placeholder="Ej. 1234-ABC"
+                formControlName="matricula"
+              ></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 2: Estado actual -->
+      <div class="form-section">
+        <div class="section-header">
+          <ion-icon name="speedometer-outline" class="section-icon"></ion-icon>
+          <h3 class="section-title">Estado actual</h3>
+        </div>
+        
+        <div class="form-grid">
+          <!-- Kilometraje actual -->
+          <div class="form-group full-width">
+            <ion-item class="form-item" lines="none" [class.error]="kmActualesControl?.invalid && kmActualesControl?.touched">
+              <ion-label position="stacked">Kilometraje actual <span class="required">*</span></ion-label>
+              <ion-input
+                type="number"
+                placeholder="Ej. 230000"
+                formControlName="kmActuales"
+                min="0"
+              ></ion-input>
+            </ion-item>
+            <div class="input-suffix-wrapper">
+              <span class="input-suffix">km</span>
+            </div>
+            <div class="error-message" *ngIf="kmActualesControl?.invalid && kmActualesControl?.touched">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>El kilometraje es obligatorio y debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Microcopy -->
+      <p class="info-text">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        Podrás editar estos datos más adelante
+      </p>
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer class="modal-footer-wrapper">
+  <ion-toolbar class="modal-footer">
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="save()" class="save-button" [disabled]="vehicleForm.invalid || isSaving">
+        <ion-spinner *ngIf="isSaving" name="crescent" class="spinner"></ion-spinner>
+        <ion-icon *ngIf="!isSaving" name="add-outline" slot="start"></ion-icon>
+        <span *ngIf="!isSaving">Añadir vehículo</span>
+        <span *ngIf="isSaving">Añadiendo...</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

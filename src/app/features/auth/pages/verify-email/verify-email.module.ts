@@ -2,18 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { HomePage } from './home.page';
+import { VerifyEmailPage } from './verify-email.page';
 
-import { HomePageRoutingModule } from './home-routing.module';
-
+import { VerifyEmailPageRoutingModule } from './verify-email-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    VerifyEmailPageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [VerifyEmailPage]
 })
-export class HomePageModule {}
+export class VerifyEmailPageModule {}

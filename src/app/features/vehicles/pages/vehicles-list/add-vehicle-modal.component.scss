@@ -1,0 +1,507 @@
+// ============================================
+// MODAL: AÑADIR VEHÍCULO
+// Diseño premium y moderno
+// ============================================
+
+// Variables de diseño
+$primary-blue: #4a90e2;
+$primary-blue-dark: #357abd;
+$danger-red: #e53e3e;
+$text-primary: #2d3748;
+$text-secondary: #4a5568;
+$text-muted: #718096;
+$border-color: #e2e8f0;
+$bg-light: #f7fafc;
+$bg-white: #ffffff;
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+$radius-sm: 12px;
+$radius-md: 16px;
+$radius-lg: 20px;
+
+// ============================================
+// HEADER (Estilos específicos del layout interno)
+// El fondo azul y estilos base ya son globales
+// ============================================
+.modal-header {
+  padding: 0 20px;
+
+  ion-title {
+    padding: 0;
+  }
+
+  .header-content {
+    width: 100%;
+  }
+
+  .header-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .header-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+  }
+
+  .header-subtitle {
+    margin: 4px 0 0 0;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.3;
+  }
+
+  .close-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin: 0;
+    min-width: 44px;
+    height: 44px;
+    border-radius: $radius-sm;
+    transition: all 0.2s ease;
+
+    ion-icon {
+      font-size: 24px;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  @media (max-width: 767px) {
+    padding: 0 16px;
+
+    .header-icon {
+      font-size: 24px;
+    }
+
+    .header-title {
+      font-size: 20px;
+    }
+
+    .header-subtitle {
+      font-size: 12px;
+    }
+  }
+}
+
+// ============================================
+// CONTENT (SCROLLEABLE)
+// ============================================
+.modal-content {
+  --background: #{$bg-light};
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  // Desktop: sin scroll interno
+  @media (min-width: 992px) {
+    --overflow: visible;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    max-height: none !important;
+  }
+}
+
+.modal-body {
+  width: 100%;
+  flex: 1;
+  // El padding ya es global (22px 24px en desktop, 20px en móvil)
+  // El overflow ya es manejado globalmente
+}
+
+// ============================================
+// FORM
+// ============================================
+.vehicle-form {
+  width: 100%;
+  max-width: 100%;
+}
+
+// ============================================
+// SECCIONES
+// ============================================
+.form-section {
+  background: $bg-white;
+  border-radius: $radius-md;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: $shadow-sm;
+  border: 1px solid $border-color;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 767px) {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: $radius-sm;
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid $bg-light;
+
+  .section-icon {
+    font-size: 22px;
+    color: $primary-blue;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 767px) {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+
+    .section-icon {
+      font-size: 20px;
+    }
+
+    .section-title {
+      font-size: 16px;
+    }
+  }
+}
+
+// ============================================
+// GRID Y FORM GROUPS
+// ============================================
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+// ============================================
+// INPUTS
+// ============================================
+.form-item {
+  --background: #{$bg-white};
+  --border-radius: #{$radius-sm};
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+  border: 2px solid $border-color;
+  border-radius: $radius-sm;
+  width: 100%;
+  margin-bottom: 0;
+  position: relative;
+  background: $bg-white;
+  transition: all 0.2s ease;
+  box-shadow: $shadow-sm;
+
+  &:focus-within {
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    transform: translateY(-1px);
+  }
+
+  &.error {
+    border-color: $danger-red;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+  }
+
+  ion-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-secondary;
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+
+    .required {
+      color: $danger-red;
+      margin-left: 3px;
+      font-weight: 700;
+    }
+
+    .optional {
+      color: $text-muted;
+      font-weight: 400;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+  }
+
+  ion-input,
+  ion-select {
+    font-size: 16px;
+    color: $text-primary;
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    width: 100%;
+    font-weight: 500;
+  }
+
+  ion-select {
+    --placeholder-color: #{$text-muted};
+  }
+
+  @media (max-width: 767px) {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    border-radius: 12px;
+  }
+}
+
+.input-suffix-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding-left: 18px;
+
+  .input-suffix {
+    font-size: 14px;
+    color: $text-muted;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 767px) {
+    padding-left: 16px;
+  }
+}
+
+// ============================================
+// ERROR MESSAGES
+// ============================================
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fee2e2;
+  border-radius: $radius-sm;
+  margin-top: 10px;
+  border-left: 3px solid $danger-red;
+  animation: slideIn 0.2s ease;
+
+  ion-icon {
+    font-size: 18px;
+    color: $danger-red;
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 13px;
+    color: #c53030;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// INFO TEXT
+// ============================================
+.info-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: $text-muted;
+  margin: 32px 0 0 0;
+  padding: 16px;
+  background: rgba(74, 144, 226, 0.05);
+  border-radius: $radius-sm;
+  text-align: center;
+  line-height: 1.5;
+  border: 1px solid rgba(74, 144, 226, 0.1);
+
+  ion-icon {
+    font-size: 18px;
+    color: $primary-blue;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 767px) {
+    margin: 24px 0 0 0;
+    padding: 14px;
+    font-size: 12px;
+  }
+}
+
+// ============================================
+// FOOTER (El estilo base ya es global)
+// Solo estilos específicos de botones
+// ============================================
+.modal-footer-wrapper {
+  // El estilo sticky y fondo ya son globales
+}
+
+.modal-footer {
+  // El padding y fondo ya son globales
+
+  .footer-buttons {
+    // El layout ya es global, pero mantenemos estilos específicos si los hay
+  }
+
+  .cancel-button {
+    --border-color: #{$border-color};
+    --color: #{$text-secondary};
+    --border-width: 2px;
+    --border-radius: #{$radius-sm};
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-weight: 600;
+    font-size: 15px;
+    min-width: 120px;
+    height: 48px;
+    text-transform: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      --background: #{$bg-light};
+      --color: #{$text-primary};
+      --border-color: #{$text-muted};
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+
+    @media (max-width: 767px) {
+      width: 100%;
+      min-width: auto;
+      height: 50px;
+    }
+  }
+
+  .save-button {
+    --background: linear-gradient(135deg, #{$primary-blue} 0%, #{$primary-blue-dark} 100%);
+    --color: white;
+    --border-radius: #{$radius-sm};
+    --padding-start: 24px;
+    --padding-end: 24px;
+    font-weight: 700;
+    font-size: 16px;
+    min-width: 180px;
+    height: 48px;
+    text-transform: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
+
+    ion-icon {
+      font-size: 20px;
+      margin-right: 6px;
+    }
+
+    .spinner {
+      margin-right: 8px;
+      --color: white;
+    }
+
+    &:hover:not([disabled]) {
+      box-shadow: 0 6px 16px rgba(74, 144, 226, 0.35);
+      transform: translateY(-1px);
+    }
+
+    &:active:not([disabled]) {
+      transform: translateY(0) scale(0.98);
+    }
+
+    &[disabled] {
+      --background: #cbd5e0;
+      --color: #{$text-muted};
+      opacity: 0.7;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 767px) {
+      width: 100%;
+      min-width: auto;
+      height: 50px;
+      font-size: 15px;
+    }
+  }
+}
+
+// ============================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================
+@media (max-width: 767px) {
+  .form-section {
+    border-radius: $radius-sm;
+  }
+
+  .form-item {
+    border-radius: 12px;
+  }
+}

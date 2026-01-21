@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar class="app-header">
+    <ion-title>
+      <div class="header-content">
+        <div class="header-left">
+          <ion-button 
+            *ngIf="showBackButton" 
+            fill="clear" 
+            class="back-button" 
+            (click)="goBack()">
+            <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <div class="logo-container" *ngIf="!showBackButton">
+            <ion-icon name="car-sport-outline" class="logo-icon"></ion-icon>
+            <span class="logo-text">AutoLytix</span>
+          </div>
+          <div class="breadcrumb" *ngIf="showBackButton && breadcrumbItems.length > 0">
+            <ng-container *ngFor="let item of breadcrumbItems; let last = last; let i = index">
+              <span 
+                class="breadcrumb-item"
+                [class.breadcrumb-link]="!last && (item.route || item.click)"
+                [class.breadcrumb-current]="last"
+                [routerLink]="item.route"
+                (click)="item.click && onBreadcrumbClick(item)">
+                {{ item.label }}
+              </span>
+              <ion-icon 
+                *ngIf="!last" 
+                name="chevron-forward-outline" 
+                class="breadcrumb-separator">
+              </ion-icon>
+            </ng-container>
+          </div>
+        </div>
+        <div class="header-actions">
+          <!-- Navegación Desktop -->
+          <div class="desktop-nav" *ngIf="showNav">
+            <a class="desktop-nav-item" routerLink="/inicio" routerLinkActive="active">
+              <ion-icon name="home-outline"></ion-icon>
+              <span>Inicio</span>
+            </a>
+            <a class="desktop-nav-item" routerLink="/vehicles" routerLinkActive="active">
+              <ion-icon name="car-outline"></ion-icon>
+              <span>Mis Vehículos</span>
+            </a>
+          </div>
+          <ion-icon name="notifications-outline" class="header-icon"></ion-icon>
+          <a class="avatar-link" [routerLink]="['/profile']">
+            <ion-avatar class="user-avatar">
+              <span class="avatar-initial">{{ getInitials() }}</span>
+            </ion-avatar>
+          </a>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>

@@ -1,0 +1,146 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ mode === 'create' ? 'Añadir mantenimiento' : 'Editar mantenimiento' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" [disabled]="isSaving">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <div class="modal-body">
+    <form [formGroup]="maintenanceForm">
+      <div class="form-grid">
+        <!-- Tipo -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none" [class.error]="tipoControl?.invalid && tipoControl?.touched">
+            <ion-label position="stacked">Tipo de mantenimiento <span class="required">*</span></ion-label>
+            <ion-select formControlName="tipo" placeholder="Selecciona el tipo">
+              <ion-select-option *ngFor="let tipo of tiposMantenimiento" [value]="tipo.value">
+                {{ tipo.label }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error-message" *ngIf="tipoControl?.invalid && tipoControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El tipo es obligatorio</span>
+          </div>
+        </div>
+
+        <!-- Fecha -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="fechaControl?.invalid && fechaControl?.touched">
+            <ion-label position="stacked">Fecha <span class="required">*</span></ion-label>
+            <ion-input
+              type="date"
+              formControlName="fecha"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="fechaControl?.invalid && fechaControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>La fecha es obligatoria</span>
+          </div>
+        </div>
+
+        <!-- Kilometraje -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="kmControl?.invalid && kmControl?.touched">
+            <ion-label position="stacked">Kilometraje <span class="required">*</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej: 210000"
+              formControlName="km"
+              min="0"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="kmControl?.invalid && kmControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El kilometraje es obligatorio y debe ser mayor o igual a 0</span>
+          </div>
+        </div>
+
+        <!-- Precio -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="precioControl?.invalid && precioControl?.touched">
+            <ion-label position="stacked">Precio (€) <span class="required">*</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej: 400.50"
+              formControlName="precio"
+              min="0"
+              step="0.01"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="precioControl?.invalid && precioControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El precio es obligatorio y debe ser mayor o igual a 0</span>
+          </div>
+        </div>
+
+        <!-- Notas -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none">
+            <ion-label position="stacked">Notas <span class="optional">(opcional)</span></ion-label>
+            <ion-textarea
+              placeholder="Observaciones o notas adicionales"
+              formControlName="notas"
+              rows="3"
+            ></ion-textarea>
+          </ion-item>
+        </div>
+
+        <!-- Próximo servicio - Título sección -->
+        <div class="form-group full-width">
+          <h3 class="section-title">Próximo servicio (opcional)</h3>
+        </div>
+
+        <!-- Próximo Km -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none">
+            <ion-label position="stacked">Próximo servicio (km) <span class="optional">(opcional)</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej: 220000"
+              formControlName="proximoKm"
+              min="0"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Próxima Fecha -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none">
+            <ion-label position="stacked">Próxima fecha <span class="optional">(opcional)</span></ion-label>
+            <ion-input
+              type="date"
+              formControlName="proximaFecha"
+            ></ion-input>
+          </ion-item>
+        </div>
+      </div>
+    </form>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="error-message-container">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="save()" class="save-button" [disabled]="maintenanceForm.invalid || isSaving">
+        <ion-spinner *ngIf="isSaving" name="crescent" class="spinner"></ion-spinner>
+        <span *ngIf="!isSaving">Guardar</span>
+        <span *ngIf="isSaving">Guardando...</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

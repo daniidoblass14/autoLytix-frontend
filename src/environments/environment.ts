@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'http://localhost:8080',
+  // NOTA: El Google Client ID es público (OAuth Client ID) y puede estar en el repositorio.
+  // Si necesitas usar un ID diferente para desarrollo, reemplázalo aquí.
+  googleClientIdWeb: '762283064675-ef4hg9vdbelpmkehtn1u34fk6o5dethj.apps.googleusercontent.com'
 };
 
 /*

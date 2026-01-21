@@ -35,3 +35,371 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* ==========================
+   GLOBAL MODAL THEME (AutoLytix)
+   Aplica a TODOS los ion-modal
+   ========================== */
+
+/* Variables base del modal */
+ion-modal {
+  --border-radius: 22px;
+  --background: #f6fbff;
+}
+
+/* Eliminar fondo oscuro del backdrop */
+ion-modal::part(background) {
+  background: transparent !important;
+}
+
+/* Caja del modal - estructura base */
+ion-modal::part(content) {
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
+  display: flex !important;
+  flex-direction: column !important;
+  background: #f6fbff !important;
+}
+
+/* Tamaño en móvil */
+ion-modal::part(content) {
+  --width: 94vw;
+  --max-width: 94vw;
+  --height: auto;
+  --max-height: 96vh;
+  --border-radius: 22px 22px 0 0;
+}
+
+/* Tamaño en web/desktop - grande y centrado */
+@media (min-width: 768px) {
+  ion-modal::part(content) {
+    --width: min(1100px, 92vw);
+    --max-width: min(1100px, 92vw);
+    --height: min(720px, 86vh);
+    --max-height: min(720px, 86vh);
+    --border-radius: 22px;
+  }
+}
+
+/* ==========================
+   HEADER (Fondo azul degradado)
+   ========================== */
+ion-modal ion-header {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+ion-modal ion-toolbar {
+  --background: transparent;
+  --color: #ffffff;
+  --border-width: 0;
+  --min-height: 72px;
+}
+
+ion-modal ion-title {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+
+/* Botón cerrar y otros botones del header */
+ion-modal ion-buttons ion-button {
+  --color: #ffffff;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    --background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+/* Iconos en el header (si hay) */
+ion-modal ion-header ion-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* ==========================
+   CONTENT (Body del modal)
+   ========================== */
+ion-modal ion-content {
+  --background: #f6fbff;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --overflow: auto;
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: #f6fbff !important;
+}
+
+/* En desktop: evitar scroll interno cuando sea posible */
+@media (min-width: 992px) {
+  ion-modal ion-content {
+    --overflow: visible;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    max-height: none !important;
+  }
+
+  ion-modal ion-content::part(scroll) {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+  }
+
+  /* Wrappers internos sin max-height */
+  ion-modal .dialog-content,
+  ion-modal .modal-content,
+  ion-modal .content-wrapper,
+  ion-modal .form-container,
+  ion-modal .modal-body {
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+  }
+}
+
+/* Contenedor interno tipo layout (opcional) */
+ion-modal .modal-body {
+  padding: 22px 24px;
+}
+
+@media (max-width: 767px) {
+  ion-modal .modal-body {
+    padding: 20px;
+  }
+}
+
+/* ==========================
+   FOOTER (Fijo abajo)
+   ========================== */
+ion-modal ion-footer {
+  flex-shrink: 0;
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 10;
+  background: #ffffff !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: auto !important;
+}
+
+ion-modal ion-footer ion-toolbar {
+  --background: #ffffff;
+  --border-width: 0;
+  --min-height: auto;
+  padding: 14px 18px;
+}
+
+@media (min-width: 768px) {
+  ion-modal ion-footer ion-toolbar {
+    padding: 20px 24px;
+  }
+}
+
+/* Contenedor de botones del footer (opcional) */
+ion-modal .modal-footer-actions,
+ion-modal .footer-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  ion-modal .modal-footer-actions,
+  ion-modal .footer-buttons {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+}
+
+/* ==========================
+   VARIANTES OPCIONALES (futuro)
+   Permite cambiar color por modal usando class="modal--green", etc.
+   ========================== */
+ion-modal.modal--green ion-header {
+  background: linear-gradient(135deg, #2ecc71 0%, #1f9d55 100%);
+}
+
+ion-modal.modal--orange ion-header {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+ion-modal.modal--red ion-header {
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+}
+
+ion-modal.modal--purple ion-header {
+  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+}
+
+/* Modal de edición de kilometraje */
+.edit-kilometraje-modal {
+  --width: 100%;
+  --max-width: 520px;
+  --height: auto;
+  --min-height: 400px;
+  --max-height: 90vh;
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 768px) {
+    --border-radius: 16px;
+    --height: auto;
+    --width: 520px;
+    --min-height: 450px;
+  }
+
+  ion-content {
+    --overflow: visible;
+    height: auto;
+    min-height: 250px;
+  }
+}
+
+/* Modal de edición de vehículo */
+.edit-vehicle-modal {
+  --width: 100%;
+  --max-width: 600px;
+  --height: auto;
+  --min-height: 400px;
+  --max-height: 90vh;
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 768px) {
+    --border-radius: 16px;
+    --height: auto;
+    --width: 600px;
+    --min-height: 500px;
+  }
+
+  ion-content {
+    --overflow: visible;
+    height: auto;
+    min-height: 300px;
+  }
+}
+
+/* Modal de edición de mantenimiento */
+.edit-maintenance-modal {
+  --width: 100%;
+  --max-width: 700px;
+  --height: auto;
+  --min-height: 400px;
+  --max-height: 90vh;
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 768px) {
+    --border-radius: 16px;
+    --height: auto;
+    --width: 700px;
+    --min-height: 500px;
+  }
+
+  ion-content {
+    --overflow: visible;
+    height: auto;
+    min-height: 300px;
+  }
+}
+
+/* Popover de acciones de mantenimiento */
+.maintenance-actions-popover {
+  --background: transparent;
+  --box-shadow: none;
+  --backdrop-opacity: 0.3;
+}
+
+/* Modal de confirmación de eliminación de mantenimiento */
+.autolytix-delete-maintenance-modal {
+  --width: 92vw;
+  --max-width: 520px;
+  --height: auto;
+  --max-height: 300px;
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 768px) {
+    --border-radius: 16px;
+    --width: 520px;
+    --max-height: 260px;
+  }
+
+  &::part(content) {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 300px;
+
+    @media (min-width: 768px) {
+      max-height: 260px;
+    }
+  }
+
+  ion-content {
+    --overflow: hidden;
+    overflow: hidden !important;
+    height: auto;
+    max-height: none;
+  }
+}
+
+/* Modal de añadir vehículo - Solo estilos específicos del formulario */
+/* El layout general (header, footer, tamaño) ahora es global */
+.add-vehicle-modal {
+  /* Si necesitas ajustes específicos para este modal, añádelos aquí */
+  /* Por ejemplo, tamaños diferentes o variaciones de color */
+}
+
+/* Modal de confirmación de eliminación de vehículo */
+.delete-vehicle-modal {
+  --width: 92vw;
+  --max-width: 520px;
+  --height: auto;
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 768px) {
+    --border-radius: 16px;
+    --width: 520px;
+  }
+
+  &::part(content) {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 300px;
+
+    @media (min-width: 768px) {
+      max-height: 260px;
+    }
+  }
+
+  ion-content {
+    --overflow: hidden;
+    overflow: hidden !important;
+    height: auto;
+    max-height: none;
+  }
+}

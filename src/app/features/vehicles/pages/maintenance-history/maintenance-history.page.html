@@ -1,0 +1,188 @@
+<app-header 
+  [showBackButton]="true"
+  [showNav]="false"
+  [breadcrumbItems]="getBreadcrumbItems()">
+</app-header>
+
+<ion-content [fullscreen]="true" class="maintenance-history-content">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-skeleton-text animated style="width: 100%; height: 150px; margin-bottom: 16px; border-radius: 12px;"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 100%; height: 150px; margin-bottom: 16px; border-radius: 12px;"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 100%; height: 150px; border-radius: 12px;"></ion-skeleton-text>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && error" class="error-container">
+    <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+    <h2>Error al cargar el historial</h2>
+    <p>{{ error }}</p>
+    <ion-button class="retry-button" (click)="retry()">
+      <ion-icon name="refresh-outline" slot="start"></ion-icon>
+      Reintentar
+    </ion-button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && !error" class="content-wrapper">
+    <!-- Mobile Wrapper -->
+    <div class="mobile-wrapper">
+      <!-- Título y Botón -->
+      <div class="page-header">
+        <div class="header-title-section">
+          <h1 class="page-title">Historial de Servicios</h1>
+          <p class="page-subtitle" *ngIf="vehicleInfo">
+            {{ vehicleInfo.marca }} {{ vehicleInfo.modelo }} {{ vehicleInfo.anio }}
+          </p>
+        </div>
+        <ion-button class="add-button" (click)="onAddMaintenance()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Añadir mantenimiento
+        </ion-button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="maintenances.length === 0" class="empty-state">
+        <ion-icon name="build-outline" class="empty-icon"></ion-icon>
+        <h2>Aún no hay mantenimientos registrados</h2>
+        <p>Comienza añadiendo el primer mantenimiento para este vehículo</p>
+        <ion-button class="empty-add-button" (click)="onAddMaintenance()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Añadir mantenimiento
+        </ion-button>
+      </div>
+
+      <!-- Lista de Mantenimientos -->
+      <div *ngIf="maintenances.length > 0" class="maintenances-list">
+        <div *ngFor="let maintenance of maintenances" class="maintenance-card">
+          <div class="maintenance-header">
+            <div class="maintenance-type">
+              <ion-icon [name]="getTipoIcon(maintenance.tipo)" class="type-icon"></ion-icon>
+              <span class="type-label">{{ getTipoLabel(maintenance.tipo) }}</span>
+            </div>
+            <div class="header-right">
+              <div class="maintenance-price">
+                {{ formatPrice(maintenance.precio) }}
+              </div>
+              <ion-button fill="clear" class="action-menu-button" (click)="openActionMenu(maintenance, $event)">
+                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <div class="maintenance-details">
+            <div class="detail-item">
+              <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+              <span class="detail-label">Fecha:</span>
+              <span class="detail-value">{{ formatDate(maintenance.fecha) }}</span>
+            </div>
+            <div class="detail-item">
+              <ion-icon name="speedometer-outline" class="detail-icon"></ion-icon>
+              <span class="detail-label">Kilometraje:</span>
+              <span class="detail-value">{{ formatKilometers(maintenance.km) }} km</span>
+            </div>
+            <div class="detail-item" *ngIf="maintenance.proximoKm">
+              <ion-icon name="arrow-forward-circle-outline" class="detail-icon next"></ion-icon>
+              <span class="detail-label">Próximo servicio:</span>
+              <span class="detail-value">{{ formatKilometers(maintenance.proximoKm) }} km</span>
+            </div>
+            <div class="detail-item" *ngIf="maintenance.proximaFecha">
+              <ion-icon name="calendar-outline" class="detail-icon next"></ion-icon>
+              <span class="detail-label">Próxima fecha:</span>
+              <span class="detail-value">{{ formatDate(maintenance.proximaFecha) }}</span>
+            </div>
+            <div class="detail-item notes" *ngIf="maintenance.notas">
+              <ion-icon name="document-text-outline" class="detail-icon"></ion-icon>
+              <div class="notes-content">
+                <span class="detail-label">Notas:</span>
+                <p class="notes-text" [title]="maintenance.notas">{{ maintenance.notas.length > 100 ? (maintenance.notas | slice:0:100) + '...' : maintenance.notas }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Wrapper -->
+    <div class="desktop-wrapper">
+      <div class="desktop-container">
+        <!-- Título y Botón -->
+        <div class="page-header desktop-header">
+          <div class="header-title-section">
+            <h1 class="page-title">Historial de Servicios</h1>
+            <p class="page-subtitle" *ngIf="vehicleInfo">
+              {{ vehicleInfo.marca }} {{ vehicleInfo.modelo }} {{ vehicleInfo.anio }}
+            </p>
+          </div>
+          <ion-button class="add-button desktop-add-button" (click)="onAddMaintenance()">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Añadir mantenimiento
+          </ion-button>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="maintenances.length === 0" class="empty-state desktop-empty">
+          <ion-icon name="build-outline" class="empty-icon"></ion-icon>
+          <h2>Aún no hay mantenimientos registrados</h2>
+          <p>Comienza añadiendo el primer mantenimiento para este vehículo</p>
+          <ion-button class="empty-add-button" (click)="onAddMaintenance()">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Añadir mantenimiento
+          </ion-button>
+        </div>
+
+        <!-- Lista de Mantenimientos -->
+        <div *ngIf="maintenances.length > 0" class="maintenances-list desktop-list">
+          <div *ngFor="let maintenance of maintenances" class="maintenance-card desktop-card">
+            <div class="maintenance-header">
+              <div class="maintenance-type">
+                <ion-icon [name]="getTipoIcon(maintenance.tipo)" class="type-icon"></ion-icon>
+                <span class="type-label">{{ getTipoLabel(maintenance.tipo) }}</span>
+              </div>
+              <div class="header-right">
+                <div class="maintenance-price">
+                  {{ formatPrice(maintenance.precio) }}
+                </div>
+                <ion-button fill="clear" class="action-menu-button" (click)="openActionMenu(maintenance, $event)">
+                  <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
+            <div class="maintenance-details">
+              <div class="details-grid">
+                <div class="detail-item">
+                  <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+                  <span class="detail-label">Fecha:</span>
+                  <span class="detail-value">{{ formatDate(maintenance.fecha) }}</span>
+                </div>
+                <div class="detail-item">
+                  <ion-icon name="speedometer-outline" class="detail-icon"></ion-icon>
+                  <span class="detail-label">Kilometraje:</span>
+                  <span class="detail-value">{{ formatKilometers(maintenance.km) }} km</span>
+                </div>
+                <div class="detail-item" *ngIf="maintenance.proximoKm">
+                  <ion-icon name="arrow-forward-circle-outline" class="detail-icon next"></ion-icon>
+                  <span class="detail-label">Próximo servicio:</span>
+                  <span class="detail-value">{{ formatKilometers(maintenance.proximoKm) }} km</span>
+                </div>
+                <div class="detail-item" *ngIf="maintenance.proximaFecha">
+                  <ion-icon name="calendar-outline" class="detail-icon next"></ion-icon>
+                  <span class="detail-label">Próxima fecha:</span>
+                  <span class="detail-value">{{ formatDate(maintenance.proximaFecha) }}</span>
+                </div>
+              </div>
+              <div class="detail-item notes" *ngIf="maintenance.notas">
+                <ion-icon name="document-text-outline" class="detail-icon"></ion-icon>
+                <div class="notes-content">
+                  <span class="detail-label">Notas:</span>
+                  <p class="notes-text" [title]="maintenance.notas">{{ maintenance.notas.length > 100 ? (maintenance.notas | slice:0:100) + '...' : maintenance.notas }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

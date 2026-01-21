@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Actualizar kilometraje</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <div class="modal-body">
+    <p class="info-text">
+      Introduce el kilometraje actual del vehículo
+    </p>
+    
+    <p class="current-km-reference">
+      Actual: <strong>{{ formatKilometers(currentKm) }} km</strong>
+    </p>
+
+    <div class="input-container">
+      <ion-item class="input-item" [class.error]="error" lines="none">
+        <ion-label position="stacked">Nuevo kilometraje</ion-label>
+        <ion-input
+          #kmInput
+          type="number"
+          inputmode="numeric"
+          placeholder="Ej: 210000"
+          [value]="newKm"
+          (ionInput)="onInputChange($event)"
+          (ionBlur)="validateInput()"
+          min="0"
+          step="1"
+          autofocus
+        ></ion-input>
+      </ion-item>
+      
+      <div class="error-message" *ngIf="error">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="save()" class="save-button" [disabled]="!newKm || newKm <= 0 || newKm < currentKm || !!error || isSaving">
+        <ion-spinner *ngIf="isSaving" name="crescent" class="spinner"></ion-spinner>
+        <span *ngIf="!isSaving">Guardar</span>
+        <span *ngIf="isSaving">Guardando...</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

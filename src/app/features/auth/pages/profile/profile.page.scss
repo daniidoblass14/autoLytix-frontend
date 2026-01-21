@@ -1,0 +1,423 @@
+// ============================================
+// CONTENT BASE
+// ============================================
+.profile-content {
+  --background: #f7fafc;
+
+  @media (min-width: 1024px) {
+    --background: #f0f4f8;
+  }
+}
+
+// ============================================
+// MODO MÓVIL (<768px)
+// ============================================
+.mobile-wrapper {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px 70px;
+  background: white;
+  min-height: 100%;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.page-header {
+  padding: 20px 0 16px;
+  background: white;
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// Card Cabecera Perfil
+.profile-header-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 32px 24px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  .avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+
+    .avatar-initial {
+      font-size: 40px;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+    }
+  }
+
+  .profile-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 8px 0;
+  }
+
+  .profile-email {
+    font-size: 15px;
+    color: #718096;
+    margin: 0 0 20px 0;
+  }
+
+  .edit-profile-button {
+    --color: #4a90e2;
+    --border-color: #4a90e2;
+    --border-radius: 10px;
+    font-weight: 500;
+    height: 44px;
+    margin: 0;
+  }
+}
+
+// Cards de Información
+.info-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 20px;
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+
+    .card-icon {
+      font-size: 24px;
+      color: #4a90e2;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2d3748;
+      margin: 0;
+    }
+  }
+}
+
+// Formularios
+.profile-form {
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 4px;
+    }
+
+    ion-input {
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      --background: #f7fafc;
+      --border-radius: 10px;
+      --border-color: #e2e8f0;
+      --border-width: 1px;
+      --border-style: solid;
+      font-size: 15px;
+      color: #2d3748;
+      min-height: 48px;
+
+      &[disabled] {
+        --background: #f0f4f8;
+        --color: #718096;
+        opacity: 0.7;
+      }
+    }
+
+    .error-message {
+      font-size: 13px;
+      color: #e53e3e;
+      margin-top: 4px;
+    }
+  }
+
+  .form-actions {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+
+    .save-button,
+    .update-password-button {
+      --background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      --color: white;
+      --border-radius: 10px;
+      font-weight: 600;
+      height: 48px;
+      margin: 0;
+    }
+  }
+}
+
+// Preferencias
+.preferences-form {
+  .preference-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid #e2e8f0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .preference-info {
+      flex: 1;
+      margin-right: 16px;
+
+      .preference-label {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 6px;
+      }
+
+      .preference-description {
+        font-size: 14px;
+        color: #718096;
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+
+    ion-toggle {
+      --background-checked: #4a90e2;
+      --handle-background-checked: white;
+    }
+  }
+}
+
+// ============================================
+// MODO DESKTOP (>=768px)
+// ============================================
+.desktop-wrapper {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+  }
+}
+
+.desktop-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 40px;
+}
+
+.desktop-header {
+  padding: 0 0 32px;
+  background: transparent;
+
+  .page-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+    text-align: left;
+  }
+}
+
+.desktop-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.desktop-profile-header {
+  padding: 48px 40px;
+  text-align: center;
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+
+    .avatar-initial {
+      font-size: 48px;
+    }
+  }
+
+  .profile-name {
+    font-size: 32px;
+  }
+
+  .profile-email {
+    font-size: 17px;
+  }
+
+  .edit-profile-button {
+    min-width: 200px;
+  }
+}
+
+.desktop-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+}
+
+.desktop-card {
+  .card-header {
+    .card-icon {
+      font-size: 28px;
+    }
+
+    .card-title {
+      font-size: 24px;
+    }
+  }
+
+  .desktop-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .form-actions {
+    .save-button,
+    .update-password-button {
+      width: auto;
+      min-width: 200px;
+    }
+  }
+}
+
+// Avatar en header
+.user-avatar {
+  cursor: pointer;
+  
+  .avatar-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 50%;
+  }
+}
+
+// ============================================
+// BOTÓN CERRAR SESIÓN
+// ============================================
+.logout-section {
+  margin-top: 32px;
+  padding: 24px 0;
+  border-top: 1px solid #e2e8f0;
+
+  .logout-button {
+    --border-color: #e53e3e;
+    --color: #e53e3e;
+    --border-width: 2px;
+    --border-radius: 12px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    text-transform: none;
+    transition: all 0.2s ease;
+
+    ion-icon {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+
+    &:hover {
+      --background: #fee2e2;
+      --color: #c53030;
+    }
+
+    &:active {
+      --background: #fecaca;
+    }
+  }
+}
+
+.desktop-logout-section {
+  margin-top: 40px;
+  padding: 32px 0;
+  text-align: center;
+
+  .logout-button {
+    min-width: 200px;
+  }
+}

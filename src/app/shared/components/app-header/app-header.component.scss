@@ -1,0 +1,218 @@
+// ============================================
+// HEADER (compartido móvil/desktop)
+// ============================================
+.app-header {
+  --background: #2e5c8a;
+  --color: white;
+  --min-height: 56px;
+
+  // Desktop: header más alto tipo dashboard
+  @media (min-width: 1024px) {
+    --min-height: 72px;
+  }
+
+  ion-title {
+    padding: 0;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+
+    // Desktop: contenido centrado
+    @media (min-width: 1024px) {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .back-button {
+    --color: white;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 0;
+    min-width: 40px;
+    height: 40px;
+
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .logo-icon {
+      font-size: 22px;
+      color: white;
+
+      @media (min-width: 1024px) {
+        font-size: 26px;
+      }
+    }
+
+    .logo-text {
+      font-size: 17px;
+      font-weight: 600;
+      color: white;
+      margin: 0;
+
+      @media (min-width: 1024px) {
+        font-size: 22px;
+      }
+    }
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+
+    @media (min-width: 1024px) {
+      font-size: 16px;
+    }
+
+    .breadcrumb-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .breadcrumb-link {
+      cursor: pointer;
+      text-decoration: underline;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .breadcrumb-separator {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .breadcrumb-current {
+      font-weight: 500;
+      color: white;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    @media (min-width: 1024px) {
+      gap: 20px;
+    }
+
+    .header-icon {
+      font-size: 22px;
+      color: white;
+      cursor: pointer;
+
+      @media (min-width: 1024px) {
+        font-size: 26px;
+      }
+    }
+
+    .avatar-link {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      overflow: hidden;
+
+      @media (min-width: 1024px) {
+        width: 40px;
+        height: 40px;
+      }
+
+      .avatar-initial {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 1;
+
+        @media (min-width: 1024px) {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+// Navegación Desktop
+.desktop-nav {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .desktop-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    &.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+}

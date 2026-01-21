@@ -1,0 +1,573 @@
+// ============================================
+// CONTENT BASE
+// ============================================
+.home-content {
+  --background: #f7fafc;
+
+  @media (min-width: 1024px) {
+    --background: #f0f4f8;
+  }
+}
+
+// ============================================
+// MODO MÓVIL (<768px)
+// ============================================
+.mobile-wrapper {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px 70px;
+  background: white;
+  min-height: 100%;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.page-header {
+  padding: 20px 0 16px;
+  background: white;
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.loading-container {
+  padding: 12px 0 20px;
+}
+
+.error-container {
+  padding: 20px 0;
+
+  .error-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 32px 24px;
+    text-align: center;
+
+    .error-icon {
+      font-size: 48px;
+      color: #ef4444;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2d3748;
+      margin: 0 0 12px 0;
+    }
+
+    p {
+      font-size: 15px;
+      color: #718096;
+      margin: 0 0 24px 0;
+      line-height: 1.5;
+    }
+
+    .retry-button {
+      --background: #4a90e2;
+      --color: white;
+      --border-radius: 8px;
+      font-weight: 600;
+      height: 44px;
+    }
+  }
+}
+
+.desktop-error {
+  padding: 40px 0;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Cards del Dashboard
+.dashboard-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+
+    .card-icon {
+      font-size: 24px;
+      color: #4a90e2;
+
+      &.alert-icon {
+        color: #f59e0b;
+      }
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2d3748;
+      margin: 0;
+    }
+  }
+}
+
+// Card Estado General
+.status-card {
+  .status-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+  }
+
+  .status-item {
+    text-align: center;
+    padding: 20px 0;
+
+    .status-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: #4a90e2;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .status-label {
+      font-size: 16px;
+      color: #718096;
+      font-weight: 500;
+    }
+  }
+
+  .maintenance-info {
+    background: #f7fafc;
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid #4a90e2;
+
+    &.status-ok {
+      border-left-color: #10b981;
+      background: #d1fae5;
+    }
+
+    &.status-warning {
+      border-left-color: #f59e0b;
+      background: #fef3c7;
+    }
+
+    &.status-overdue {
+      border-left-color: #ef4444;
+      background: #fee2e2;
+    }
+
+    .maintenance-item {
+      .maintenance-label {
+        font-size: 14px;
+        color: #718096;
+        margin: 0 0 8px 0;
+        font-weight: 500;
+      }
+
+      .maintenance-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0 0 6px 0;
+      }
+
+      .maintenance-detail {
+        font-size: 13px;
+        color: #a0aec0;
+        margin: 0;
+      }
+
+      .maintenance-vehicle {
+        font-size: 14px;
+        color: #4a5568;
+        margin: 4px 0 0 0;
+        font-weight: 500;
+      }
+
+      .maintenance-type {
+        font-size: 13px;
+        color: #718096;
+        margin: 4px 0 0 0;
+        font-style: italic;
+      }
+    }
+  }
+
+  .alert-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+
+    &.ok {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    &.alert-high {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    &.alert-medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .alert-icon {
+      font-size: 20px;
+      color: #f59e0b;
+    }
+
+    &.ok .alert-icon {
+      color: #10b981;
+    }
+
+    &.alert-high .alert-icon {
+      color: #ef4444;
+    }
+  }
+
+  .vehicle-illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+
+    .illustration-icon {
+      font-size: 120px;
+      color: #e2e8f0;
+      opacity: 0.5;
+    }
+  }
+}
+
+// Card Alertas
+.alerts-card {
+  .alerts-content {
+    .alert-item {
+      padding: 16px;
+      background: #fef3c7;
+      border-radius: 12px;
+      border-left: 4px solid #f59e0b;
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.alert-priority-high {
+        background: #fee2e2;
+        border-left-color: #ef4444;
+      }
+
+      &.alert-priority-medium {
+        background: #fef3c7;
+        border-left-color: #f59e0b;
+      }
+
+      &.alert-priority-low {
+        background: #dbeafe;
+        border-left-color: #4a90e2;
+      }
+
+      &.alert-type-danger {
+        background: #fee2e2;
+        border-left-color: #ef4444;
+      }
+
+      &.alert-type-warning {
+        background: #fef3c7;
+        border-left-color: #f59e0b;
+      }
+
+      &.alert-type-info {
+        background: #dbeafe;
+        border-left-color: #4a90e2;
+      }
+
+      .alert-vehicle {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 8px;
+      }
+
+      .alert-message {
+        font-size: 15px;
+        color: #4a5568;
+        margin-bottom: 12px;
+      }
+
+      .alert-detail-button {
+        --color: #4a90e2;
+        --border-color: #4a90e2;
+        --border-radius: 8px;
+        font-size: 14px;
+        height: 36px;
+        margin: 0;
+      }
+    }
+
+    .empty-alerts {
+      text-align: center;
+      padding: 40px 20px;
+      color: #718096;
+      font-size: 15px;
+    }
+  }
+}
+
+// Card Acciones Rápidas
+.actions-card {
+  .actions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .action-button {
+    --border-radius: 12px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    height: 56px;
+    margin: 0;
+    text-transform: none;
+
+    &.add-vehicle {
+      --background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --color: white;
+    }
+
+    &.update-mileage {
+      --background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      --color: white;
+    }
+
+    &.add-maintenance {
+      --background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --color: white;
+    }
+
+    ion-icon {
+      font-size: 22px;
+    }
+  }
+}
+
+// Card Última Actividad
+.activity-card {
+  .activity-content {
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e8f0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .activity-icon {
+        font-size: 24px;
+        color: #718096;
+        flex-shrink: 0;
+
+        &.success {
+          color: #10b981;
+        }
+
+        &.info {
+          color: #4a90e2;
+        }
+      }
+
+      .activity-details {
+        flex: 1;
+        min-width: 0;
+
+        .activity-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: #2d3748;
+          margin-bottom: 6px;
+        }
+
+        .activity-description {
+          font-size: 14px;
+          color: #4a5568;
+          margin-bottom: 4px;
+          line-height: 1.5;
+
+          strong {
+            color: #2d3748;
+            font-weight: 600;
+          }
+        }
+
+        .activity-time {
+          font-size: 13px;
+          color: #a0aec0;
+        }
+      }
+    }
+
+    .activity-footer {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      text-align: right;
+
+      .view-history-link {
+        color: #4a90e2;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .empty-activity {
+      text-align: center;
+      padding: 40px 20px;
+      color: #718096;
+      font-size: 15px;
+    }
+  }
+}
+
+// ============================================
+// MODO DESKTOP (>=768px)
+// ============================================
+.desktop-wrapper {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+  }
+}
+
+.desktop-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 40px;
+}
+
+.desktop-header {
+  padding: 0 0 32px;
+  background: transparent;
+
+  .page-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+    text-align: left;
+  }
+}
+
+.desktop-loading {
+  padding: 0 0 40px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+  }
+}
+
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &.left-column {
+    // Columna izquierda más ancha
+  }
+
+  &.right-column {
+    // Columna derecha más estrecha
+  }
+}
+
+.desktop-card {
+  .card-header {
+    .card-icon {
+      font-size: 28px;
+    }
+
+    .card-title {
+      font-size: 24px;
+    }
+  }
+}
+
+.desktop-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

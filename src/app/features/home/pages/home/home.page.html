@@ -1,0 +1,398 @@
+<app-header></app-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <!-- MODO MÓVIL -->
+  <div class="content-wrapper mobile-wrapper">
+    <div class="page-header">
+      <h1 class="page-title">Inicio</h1>
+      <p class="page-subtitle">¡Hola! Aquí tienes una vista general de tus vehículos.</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-container">
+      <div class="error-card">
+        <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+        <h3>Error al cargar el dashboard</h3>
+        <p>{{ error }}</p>
+        <ion-button (click)="onRetry()" class="retry-button">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Reintentar
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-skeleton-text animated style="width: 100%; height: 200px; margin-bottom: 16px; border-radius: 12px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 150px; margin-bottom: 16px; border-radius: 12px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 150px; border-radius: 12px;"></ion-skeleton-text>
+    </div>
+
+    <!-- Empty State - Sin vehículos -->
+    <div *ngIf="!isLoading && !error && stats && stats.totalVehicles === 0" class="empty-state">
+      <ion-icon name="car-outline" class="empty-icon"></ion-icon>
+      <h2>Aún no tienes vehículos</h2>
+      <p>Comienza agregando tu primer vehículo para empezar a gestionar tus mantenimientos</p>
+      <ion-button class="empty-add-button" (click)="onAddVehicle()">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Añadir Vehículo
+      </ion-button>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div *ngIf="!isLoading && !error && stats && stats.totalVehicles > 0" class="dashboard-content">
+      <!-- Estado General -->
+      <div class="dashboard-card status-card">
+        <div class="card-header">
+          <ion-icon name="car-sport-outline" class="card-icon"></ion-icon>
+          <h3 class="card-title">Estado General</h3>
+        </div>
+        <div class="status-content">
+          <div class="status-item">
+            <div class="status-value">{{ stats?.totalVehicles || 0 }}</div>
+            <div class="status-label">Vehículos registrados</div>
+          </div>
+          
+          <!-- Próximo Mantenimiento -->
+          <div class="maintenance-info" *ngIf="stats?.nextMaintenance; else noNextMaintenance" [class.status-ok]="stats?.nextMaintenance?.status === 'ok'" [class.status-warning]="stats?.nextMaintenance?.status === 'warning'" [class.status-overdue]="stats?.nextMaintenance?.status === 'overdue'">
+            <div class="maintenance-item">
+              <p class="maintenance-label">Próximo mantenimiento</p>
+              <p class="maintenance-value" *ngIf="stats?.nextMaintenance?.message">
+                {{ stats?.nextMaintenance?.message }}
+              </p>
+              <p class="maintenance-vehicle" *ngIf="stats?.nextMaintenance?.vehicleLabel">
+                {{ stats?.nextMaintenance?.vehicleLabel }}
+              </p>
+              <p class="maintenance-type" *ngIf="stats?.nextMaintenance?.maintenanceType">
+                {{ stats?.nextMaintenance?.maintenanceType }}
+              </p>
+            </div>
+          </div>
+          <ng-template #noNextMaintenance>
+            <div class="maintenance-info">
+              <div class="maintenance-item">
+                <p class="maintenance-label">Próximo mantenimiento</p>
+                <p class="maintenance-value" style="color: #718096;">Sin próximos mantenimientos</p>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Última Actualización -->
+          <div class="maintenance-info" *ngIf="stats?.lastKmUpdate; else noLastUpdate">
+            <div class="maintenance-item">
+              <p class="maintenance-label">Última actualización</p>
+              <p class="maintenance-value">
+                Hace {{ stats?.lastKmUpdate?.daysAgo || 0 }} {{ (stats?.lastKmUpdate?.daysAgo || 0) === 1 ? 'día' : 'días' }}
+              </p>
+              <p class="maintenance-vehicle">
+                {{ stats?.lastKmUpdate?.vehicleLabel || '' }} - {{ formatKilometers(stats?.lastKmUpdate?.currentKm || 0) }} km
+              </p>
+            </div>
+          </div>
+          <ng-template #noLastUpdate>
+            <div class="maintenance-info" *ngIf="!stats?.nextMaintenance">
+              <div class="maintenance-item">
+                <p class="maintenance-label">Última actualización</p>
+                <p class="maintenance-value" style="color: #718096;">Sin actualizaciones recientes</p>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Badge de Alertas -->
+              <div class="alert-badge" *ngIf="stats?.activeAlerts && (stats?.activeAlerts || 0) > 0" [class.alert-high]="stats?.activeAlerts && (stats?.activeAlerts || 0) > 3" [class.alert-medium]="stats?.activeAlerts && (stats?.activeAlerts || 0) <= 3">
+                <ion-icon name="warning-outline" class="alert-icon"></ion-icon>
+                <span>{{ stats?.activeAlerts || 0 }} Alerta{{ (stats?.activeAlerts || 0) > 1 ? 's' : '' }} activa{{ (stats?.activeAlerts || 0) > 1 ? 's' : '' }}</span>
+              </div>
+              <div class="alert-badge ok" *ngIf="!stats?.activeAlerts || (stats?.activeAlerts || 0) === 0">
+                <ion-icon name="checkmark-circle-outline" class="alert-icon"></ion-icon>
+                <span>Todo en orden</span>
+              </div>
+
+          <div class="vehicle-illustration">
+            <ion-icon name="car-outline" class="illustration-icon"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alertas Importantes -->
+      <div class="dashboard-card alerts-card">
+        <div class="card-header">
+          <ion-icon name="warning-outline" class="card-icon alert-icon"></ion-icon>
+          <h3 class="card-title">Alertas Importantes</h3>
+        </div>
+        <div class="alerts-content">
+          <div *ngIf="alerts.length > 0; else noAlerts">
+            <div class="alert-item" *ngFor="let alert of alerts" [class.alert-priority-high]="alert.priority === 'high'" [class.alert-priority-medium]="alert.priority === 'medium'" [class.alert-priority-low]="alert.priority === 'low'" [class.alert-type-warning]="alert.type === 'warning'" [class.alert-type-danger]="alert.type === 'danger'" [class.alert-type-info]="alert.type === 'info'">
+              <div class="alert-vehicle">{{ alert.vehicleLabel }}</div>
+              <div class="alert-message">{{ alert.message }}</div>
+              <ion-button 
+                fill="outline" 
+                class="alert-detail-button"
+                (click)="onViewAlertDetail(alert)">
+                Ver Detalle
+              </ion-button>
+            </div>
+          </div>
+          <ng-template #noAlerts>
+            <div class="empty-alerts">
+              <p>No tienes alertas importantes 🎉</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="dashboard-card actions-card">
+        <div class="card-header">
+          <ion-icon name="refresh-outline" class="card-icon"></ion-icon>
+          <h3 class="card-title">Acciones Rápidas</h3>
+        </div>
+        <div class="actions-grid">
+          <ion-button class="action-button add-vehicle" (click)="onAddVehicle()">
+            <ion-icon name="add" slot="start"></ion-icon>
+            Añadir Vehículo
+          </ion-button>
+          <ion-button class="action-button update-mileage" (click)="onUpdateMileage()">
+            <ion-icon name="location-outline" slot="start"></ion-icon>
+            Actualizar Kilometraje
+          </ion-button>
+          <ion-button class="action-button add-maintenance" (click)="onAddMaintenance()">
+            <ion-icon name="build-outline" slot="start"></ion-icon>
+            Añadir Mantenimiento
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Última Actividad -->
+      <div class="dashboard-card activity-card">
+        <div class="card-header">
+          <ion-icon name="time-outline" class="card-icon"></ion-icon>
+          <h3 class="card-title">Última Actividad</h3>
+        </div>
+        <div class="activity-content">
+          <div *ngIf="recentActivity.length > 0; else noActivity">
+            <div class="activity-item" *ngFor="let activity of recentActivity">
+              <ion-icon [name]="getActivityIcon(activity) + '-outline'" class="activity-icon" [class.success]="activity.type === 'mileage'" [class.info]="activity.type === 'maintenance'"></ion-icon>
+              <div class="activity-details">
+                <div class="activity-title">{{ activity.title }}</div>
+                <div class="activity-description">
+                  <strong>{{ activity.vehicleLabel }}</strong> {{ activity.description }}
+                </div>
+                <div class="activity-time">{{ activity.timeAgo || 'Reciente' }}</div>
+              </div>
+            </div>
+            <div class="activity-footer">
+              <a class="view-history-link" (click)="onViewHistory()">Ver historial ></a>
+            </div>
+          </div>
+          <ng-template #noActivity>
+            <div class="empty-activity">
+              <p>Aún no hay actividad reciente</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODO DESKTOP -->
+  <div class="desktop-wrapper">
+    <div class="desktop-container">
+      <div class="page-header desktop-header">
+        <h1 class="page-title">Inicio</h1>
+        <p class="page-subtitle">¡Hola! Aquí tienes una vista general de tus vehículos.</p>
+      </div>
+
+      <!-- Error State Desktop -->
+      <div *ngIf="error && !isLoading" class="error-container desktop-error">
+        <div class="error-card">
+          <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+          <h3>Error al cargar el dashboard</h3>
+          <p>{{ error }}</p>
+          <ion-button (click)="onRetry()" class="retry-button">
+            <ion-icon name="refresh-outline" slot="start"></ion-icon>
+            Reintentar
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Loading State Desktop -->
+      <div *ngIf="isLoading" class="loading-container desktop-loading">
+        <ion-skeleton-text animated style="width: 100%; height: 300px; margin-bottom: 24px; border-radius: 16px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 250px; border-radius: 16px;"></ion-skeleton-text>
+      </div>
+
+      <!-- Empty State Desktop - Sin vehículos -->
+      <div *ngIf="!isLoading && !error && stats && stats.totalVehicles === 0" class="empty-state desktop-empty">
+        <ion-icon name="car-outline" class="empty-icon"></ion-icon>
+        <h2>Aún no tienes vehículos</h2>
+        <p>Comienza agregando tu primer vehículo para empezar a gestionar tus mantenimientos</p>
+        <ion-button class="empty-add-button" (click)="onAddVehicle()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Añadir Vehículo
+        </ion-button>
+      </div>
+
+      <!-- Dashboard Grid Desktop -->
+      <div *ngIf="!isLoading && !error && stats && stats.totalVehicles > 0" class="dashboard-grid">
+        <!-- Columna Izquierda -->
+        <div class="dashboard-column left-column">
+          <!-- Estado General -->
+          <div class="dashboard-card status-card desktop-card">
+            <div class="card-header">
+              <ion-icon name="car-sport-outline" class="card-icon"></ion-icon>
+              <h3 class="card-title">Estado General</h3>
+            </div>
+            <div class="status-content">
+              <div class="status-item">
+                <div class="status-value">{{ stats?.totalVehicles || 0 }}</div>
+                <div class="status-label">Vehículos registrados</div>
+              </div>
+              
+              <!-- Próximo Mantenimiento -->
+              <div class="maintenance-info" *ngIf="stats?.nextMaintenance; else noNextMaintenanceDesktop" [class.status-ok]="stats?.nextMaintenance?.status === 'ok'" [class.status-warning]="stats?.nextMaintenance?.status === 'warning'" [class.status-overdue]="stats?.nextMaintenance?.status === 'overdue'">
+                <div class="maintenance-item">
+                  <p class="maintenance-label">Próximo mantenimiento</p>
+                  <p class="maintenance-value" *ngIf="stats?.nextMaintenance?.message">
+                    {{ stats?.nextMaintenance?.message }}
+                  </p>
+                  <p class="maintenance-vehicle" *ngIf="stats?.nextMaintenance?.vehicleLabel">
+                    {{ stats?.nextMaintenance?.vehicleLabel }}
+                  </p>
+                  <p class="maintenance-type" *ngIf="stats?.nextMaintenance?.maintenanceType">
+                    {{ stats?.nextMaintenance?.maintenanceType }}
+                  </p>
+                </div>
+              </div>
+              <ng-template #noNextMaintenanceDesktop>
+                <div class="maintenance-info">
+                  <div class="maintenance-item">
+                    <p class="maintenance-label">Próximo mantenimiento</p>
+                    <p class="maintenance-value" style="color: #718096;">Sin próximos mantenimientos</p>
+                  </div>
+                </div>
+              </ng-template>
+
+              <!-- Última Actualización -->
+              <div class="maintenance-info" *ngIf="stats?.lastKmUpdate; else noLastUpdateDesktop">
+                <div class="maintenance-item">
+                  <p class="maintenance-label">Última actualización</p>
+                  <p class="maintenance-value">
+                    Hace {{ stats?.lastKmUpdate?.daysAgo || 0 }} {{ (stats?.lastKmUpdate?.daysAgo || 0) === 1 ? 'día' : 'días' }}
+                  </p>
+                  <p class="maintenance-vehicle">
+                    {{ stats?.lastKmUpdate?.vehicleLabel || '' }} - {{ formatKilometers(stats?.lastKmUpdate?.currentKm || 0) }} km
+                  </p>
+                </div>
+              </div>
+              <ng-template #noLastUpdateDesktop>
+                <div class="maintenance-info" *ngIf="!stats?.nextMaintenance">
+                  <div class="maintenance-item">
+                    <p class="maintenance-label">Última actualización</p>
+                    <p class="maintenance-value" style="color: #718096;">Sin actualizaciones recientes</p>
+                  </div>
+                </div>
+              </ng-template>
+
+              <!-- Badge de Alertas -->
+              <div class="alert-badge" *ngIf="stats?.activeAlerts && (stats?.activeAlerts || 0) > 0" [class.alert-high]="stats?.activeAlerts && (stats?.activeAlerts || 0) > 3" [class.alert-medium]="stats?.activeAlerts && (stats?.activeAlerts || 0) <= 3">
+                <ion-icon name="warning-outline" class="alert-icon"></ion-icon>
+                <span>{{ stats?.activeAlerts || 0 }} Alerta{{ (stats?.activeAlerts || 0) > 1 ? 's' : '' }} activa{{ (stats?.activeAlerts || 0) > 1 ? 's' : '' }}</span>
+              </div>
+              <div class="alert-badge ok" *ngIf="!stats?.activeAlerts || (stats?.activeAlerts || 0) === 0">
+                <ion-icon name="checkmark-circle-outline" class="alert-icon"></ion-icon>
+                <span>Todo en orden</span>
+              </div>
+
+              <div class="vehicle-illustration">
+                <ion-icon name="car-outline" class="illustration-icon"></ion-icon>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones Rápidas -->
+          <div class="dashboard-card actions-card desktop-card">
+            <div class="card-header">
+              <ion-icon name="refresh-outline" class="card-icon"></ion-icon>
+              <h3 class="card-title">Acciones Rápidas</h3>
+            </div>
+            <div class="actions-grid desktop-actions">
+              <ion-button class="action-button add-vehicle" (click)="onAddVehicle()">
+                <ion-icon name="add" slot="start"></ion-icon>
+                Añadir Vehículo
+              </ion-button>
+              <ion-button class="action-button update-mileage" (click)="onUpdateMileage()">
+                <ion-icon name="location-outline" slot="start"></ion-icon>
+                Actualizar Kilometraje
+              </ion-button>
+              <ion-button class="action-button add-maintenance" (click)="onAddMaintenance()">
+                <ion-icon name="build-outline" slot="start"></ion-icon>
+                Añadir Mantenimiento
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div class="dashboard-column right-column">
+          <!-- Alertas Importantes -->
+          <div class="dashboard-card alerts-card desktop-card">
+            <div class="card-header">
+              <ion-icon name="warning-outline" class="card-icon alert-icon"></ion-icon>
+              <h3 class="card-title">Alertas Importantes</h3>
+            </div>
+            <div class="alerts-content">
+              <div *ngIf="alerts.length > 0; else noAlertsDesktop">
+                <div class="alert-item" *ngFor="let alert of alerts" [class.alert-priority-high]="alert.priority === 'high'" [class.alert-priority-medium]="alert.priority === 'medium'" [class.alert-priority-low]="alert.priority === 'low'" [class.alert-type-warning]="alert.type === 'warning'" [class.alert-type-danger]="alert.type === 'danger'" [class.alert-type-info]="alert.type === 'info'">
+                  <div class="alert-vehicle">{{ alert.vehicleLabel }}</div>
+                  <div class="alert-message">{{ alert.message }}</div>
+                  <ion-button 
+                    fill="outline" 
+                    class="alert-detail-button"
+                    (click)="onViewAlertDetail(alert)">
+                    Ver Detalle
+                  </ion-button>
+                </div>
+              </div>
+              <ng-template #noAlertsDesktop>
+                <div class="empty-alerts">
+                  <p>No tienes alertas importantes 🎉</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <!-- Última Actividad -->
+          <div class="dashboard-card activity-card desktop-card">
+            <div class="card-header">
+              <ion-icon name="time-outline" class="card-icon"></ion-icon>
+              <h3 class="card-title">Última Actividad</h3>
+            </div>
+            <div class="activity-content">
+              <div *ngIf="recentActivity.length > 0; else noActivityDesktop">
+                <div class="activity-item" *ngFor="let activity of recentActivity">
+                  <ion-icon [name]="getActivityIcon(activity) + '-outline'" class="activity-icon" [class.success]="activity.type === 'mileage'" [class.info]="activity.type === 'maintenance'"></ion-icon>
+                  <div class="activity-details">
+                    <div class="activity-title">{{ activity.title }}</div>
+                    <div class="activity-description">
+                      <strong>{{ activity.vehicleLabel }}</strong> {{ activity.description }}
+                    </div>
+                    <div class="activity-time">{{ activity.timeAgo || 'Reciente' }}</div>
+                  </div>
+                </div>
+                <div class="activity-footer">
+                  <a class="view-history-link" (click)="onViewHistory()">Ver historial ></a>
+                </div>
+              </div>
+              <ng-template #noActivityDesktop>
+                <div class="empty-activity">
+                  <p>Aún no hay actividad reciente</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

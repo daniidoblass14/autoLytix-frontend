@@ -1,0 +1,158 @@
+// Header del modal - Los estilos base ya son globales
+// Solo mantenemos estilos específicos si los hay
+
+// Contenido del modal - El fondo y padding ya son globales
+.modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body {
+  width: 100%;
+  flex: 1;
+  // El padding ya es global (22px 24px en desktop, 20px en móvil)
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 16px;
+
+    ion-spinner {
+      --color: #4a90e2;
+    }
+
+    p {
+      color: #718096;
+      font-size: 14px;
+    }
+  }
+
+  form.mileage-form {
+    width: 100%;
+    display: block;
+    min-height: 100%;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    width: 100%;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .form-item {
+    --background: white;
+    --border-radius: 10px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --inner-padding-end: 0;
+    --inner-padding-start: 0;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 0;
+    position: relative;
+
+    &:focus-within {
+      border-color: #4a90e2;
+    }
+
+    &.error {
+      border-color: #e53e3e;
+    }
+
+    ion-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a5568;
+      margin-bottom: 8px;
+
+      .required {
+        color: #e53e3e;
+        margin-left: 2px;
+      }
+    }
+
+    ion-input,
+    ion-select {
+      font-size: 16px;
+      color: #2d3748;
+      --padding-start: 0;
+      --padding-end: 0;
+      width: 100%;
+    }
+
+    ion-select {
+      --placeholder-color: #a0aec0;
+    }
+  }
+
+  .input-suffix-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    padding-left: 16px;
+
+    .input-suffix {
+      font-size: 14px;
+      color: #718096;
+      font-weight: 500;
+    }
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #fed7d7;
+    border-radius: 8px;
+    margin-top: 8px;
+
+    ion-icon {
+      font-size: 18px;
+      color: #e53e3e;
+      flex-shrink: 0;
+    }
+
+    span {
+      font-size: 13px;
+      color: #c53030;
+      font-weight: 500;
+    }
+  }
+
+  .info-text {
+    font-size: 13px;
+    color: #718096;
+    margin: 16px 0 0 0;
+    text-align: center;
+    line-height: 1.5;
+  }
+}
+
+// Footer del modal - El padding y layout ya son globales
+// Solo mantenemos estilos específicos de botones
+.modal-footer {
+  .footer-buttons {
+    // El layout ya es global
+
+    .save-button {
+      // Color azul estándar (ya es el global, pero lo mantenemos por si acaso)
+      --background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    }
+  }
+}

@@ -1,0 +1,150 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <ion-icon name="build-outline"></ion-icon>
+        Añadir Mantenimiento
+      </span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="cancel()" [disabled]="isSaving">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content" [scrollY]="true" [fullscreen]="false">
+  <div class="modal-body">
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando vehículos...</p>
+    </div>
+
+    <form [formGroup]="maintenanceForm" class="maintenance-form" *ngIf="!isLoading">
+      <div class="form-grid">
+        <!-- Seleccionar Vehículo -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none" [class.error]="vehicleControl?.invalid && vehicleControl?.touched">
+            <ion-label position="stacked">Vehículo <span class="required">*</span></ion-label>
+            <ion-select 
+              formControlName="vehiculoId" 
+              placeholder="Selecciona un vehículo"
+              (ionChange)="onVehicleChange()">
+              <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id">
+                {{ getVehicleDisplayName(vehicle) }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error-message" *ngIf="vehicleControl?.invalid && vehicleControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>Debes seleccionar un vehículo</span>
+          </div>
+        </div>
+
+        <!-- Tipo de Mantenimiento -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none" [class.error]="tipoControl?.invalid && tipoControl?.touched">
+            <ion-label position="stacked">Tipo de Mantenimiento <span class="required">*</span></ion-label>
+            <ion-select formControlName="tipo" placeholder="Selecciona el tipo">
+              <ion-select-option *ngFor="let type of maintenanceTypes" [value]="type.value">
+                {{ type.label }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error-message" *ngIf="tipoControl?.invalid && tipoControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>Debes seleccionar un tipo de mantenimiento</span>
+          </div>
+        </div>
+
+        <!-- Fecha -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="fechaControl?.invalid && fechaControl?.touched">
+            <ion-label position="stacked">Fecha <span class="required">*</span></ion-label>
+            <ion-input
+              type="date"
+              formControlName="fecha"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="fechaControl?.invalid && fechaControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>La fecha es obligatoria</span>
+          </div>
+        </div>
+
+        <!-- Kilómetros -->
+        <div class="form-group">
+          <ion-item class="form-item" lines="none" [class.error]="kmControl?.invalid && kmControl?.touched">
+            <ion-label position="stacked">Kilómetros <span class="required">*</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej. 250000"
+              formControlName="km"
+              min="0"
+            ></ion-input>
+          </ion-item>
+          <div class="input-suffix-wrapper">
+            <span class="input-suffix">km</span>
+          </div>
+          <div class="error-message" *ngIf="kmControl?.invalid && kmControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>Los kilómetros son obligatorios y deben ser mayor o igual a 0</span>
+          </div>
+        </div>
+
+        <!-- Precio -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none" [class.error]="precioControl?.invalid && precioControl?.touched">
+            <ion-label position="stacked">Precio <span class="required">*</span></ion-label>
+            <ion-input
+              type="number"
+              placeholder="Ej. 150.50"
+              formControlName="precio"
+              min="0"
+              step="0.01"
+            ></ion-input>
+          </ion-item>
+          <div class="input-suffix-wrapper">
+            <span class="input-suffix">€</span>
+          </div>
+          <div class="error-message" *ngIf="precioControl?.invalid && precioControl?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>El precio es obligatorio y debe ser mayor o igual a 0</span>
+          </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="form-group full-width">
+          <ion-item class="form-item" lines="none">
+            <ion-label position="stacked">Observaciones <span class="optional">(opcional)</span></ion-label>
+            <ion-textarea
+              placeholder="Añade notas adicionales sobre el mantenimiento..."
+              formControlName="notas"
+              rows="4"
+              autoGrow="true"
+            ></ion-textarea>
+          </ion-item>
+        </div>
+      </div>
+
+      <p class="info-text">Podrás editar estos datos más adelante.</p>
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="modal-footer">
+    <div class="footer-buttons">
+      <ion-button fill="outline" (click)="cancel()" class="cancel-button" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button (click)="save()" class="save-button" [disabled]="maintenanceForm.invalid || isSaving || isLoading">
+        <ion-spinner *ngIf="isSaving" name="crescent" class="spinner"></ion-spinner>
+        <ion-icon *ngIf="!isSaving" name="add-outline" slot="start"></ion-icon>
+        <span *ngIf="!isSaving">Añadir Mantenimiento</span>
+        <span *ngIf="isSaving">Añadiendo...</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
