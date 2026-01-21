@@ -1,70 +1,149 @@
-# Specifies intentionally untracked files to ignore when using Git
-# http://git-scm.com/docs/gitignore
-
+# =====================================================
+# Archivos temporales y del sistema
+# =====================================================
 *~
 *.sw[mnpcod]
-.tmp
 *.tmp
 *.tmp.*
-UserInterfaceState.xcuserstate
+.tmp/
 $RECYCLE.BIN/
+.DS_Store
+Thumbs.db
+desktop.ini
 
+# =====================================================
+# Logs
+# =====================================================
 *.log
-log.txt
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
+# =====================================================
+# Node / Package managers
+# =====================================================
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
 
-/.sourcemaps
-/.versions
-/coverage
+# =====================================================
+# Angular
+# =====================================================
+dist/
+.angular/
+.angular/cache/
+coverage/
+out-tsc/
+bazel-out/
+*.tsbuildinfo
 
+# =====================================================
 # Ionic
-/.ionic
-/www
-/platforms
-/plugins
+# =====================================================
+www/
+.ionic/
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# =====================================================
+# Capacitor (solo builds y caches, NO el código)
+# =====================================================
+android/app/build/
+android/build/
+android/.gradle/
+ios/build/
+ios/App/Pods/
+ios/App/Podfile.lock
+.capacitor/
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# =====================================================
+# Testing / tooling
+# =====================================================
+.nyc_output/
+test-results/
+playwright-report/
+playwright/.cache/
+.eslintcache
+.stylelintcache
 
-# IDEs and editors
+# =====================================================
+# Caches
+# =====================================================
+.cache/
+.sass-cache/
+.npm/
+.nx/
+.nx/cache/
+
+# =====================================================
+# IDEs y editores
+# =====================================================
 .idea/
 .project
 .classpath
+.settings/
 .c9/
 *.launch
-.settings/
 *.sublime-project
 *.sublime-workspace
+.history/
 
 # Visual Studio Code
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
+# =====================================================
+# Variables de entorno y secretos
+# =====================================================
+.env
+.env.*
+*.env
+*.env.*
+.env.local
+.env.*.local
 
-# Miscellaneous
-/.angular
-/.angular/cache
-.sass-cache/
-/.nx
-/.nx/cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+# Angular environments locales
+src/environments/environment.local.ts
+src/environments/*.local.ts
 
-# System files
-.DS_Store
-Thumbs.db
+# =====================================================
+# Android (archivos generados)
+# =====================================================
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+local.properties
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# =====================================================
+# iOS (archivos generados)
+# =====================================================
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.app
+*.framework
+*.xcuserstate
+DerivedData/
+xcuserdata/
+project.xcworkspace/
+!default.xcworkspace
+
+# =====================================================
+# Configuración local (no versionar)
+# =====================================================
+config.local.json
+capacitor.config.local.ts
